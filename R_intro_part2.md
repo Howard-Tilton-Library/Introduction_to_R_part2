@@ -1,7 +1,7 @@
 ---
 title: "Intro to Coding in R, Part II: Data Management and Processing"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "`r format(Sys.time(), '%d %B %Y')`"
+date: "12 March 2023"
 
 format: 
   html:
@@ -28,6 +28,8 @@ execute:
   echo: true
   keep-md: true
 ---
+
+
 
 <br>
 
