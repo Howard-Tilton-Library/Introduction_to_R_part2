@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Mike Ellis (he/him/his)   PhD Candidate   Ecology &amp; Evolutionary Biology   Tulane University   mellis5@tulane.edu">
-<meta name="dcterms.date" content="2023-03-15">
+<meta name="dcterms.date" content="2023-03-16">
 
 <title>Intro to Coding in R, Part II: Management, Processing &amp; Analysis</title>
 <style>
@@ -2608,7 +2608,7 @@ vertical-align: -.125em;
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
-  <ul class="collapse">
+  <ul>
   <li><a href="#projects" id="toc-projects" class="nav-link active" data-scroll-target="#projects"><span class="toc-section-number">1</span>  <strong>Projects</strong></a>
   <ul class="collapse">
   <li><a href="#create-your-first-project" id="toc-create-your-first-project" class="nav-link" data-scroll-target="#create-your-first-project">Create your first project</a></li>
@@ -2620,16 +2620,33 @@ vertical-align: -.125em;
   <li><a href="#installing" id="toc-installing" class="nav-link" data-scroll-target="#installing">Installing</a></li>
   <li><a href="#loading" id="toc-loading" class="nav-link" data-scroll-target="#loading">Loading</a></li>
   </ul></li>
-  <li><a href="#enter-the-tidyverse" id="toc-enter-the-tidyverse" class="nav-link" data-scroll-target="#enter-the-tidyverse"><span class="toc-section-number">3</span>  <strong>Enter the Tidyverse</strong></a></li>
-  <li><a href="#grouping-summarizing-data" id="toc-grouping-summarizing-data" class="nav-link" data-scroll-target="#grouping-summarizing-data"><span class="toc-section-number">4</span>  <strong>Grouping &amp; Summarizing Data</strong></a>
+  <li><a href="#welcome-to-the-tidyverse" id="toc-welcome-to-the-tidyverse" class="nav-link" data-scroll-target="#welcome-to-the-tidyverse"><span class="toc-section-number">3</span>  <strong>Welcome to the Tidyverse</strong></a>
+  <ul class="collapse">
+  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about">About</a></li>
+  <li><a href="#popular-tidyverse-functions" id="toc-popular-tidyverse-functions" class="nav-link" data-scroll-target="#popular-tidyverse-functions">Popular <code>tidyverse</code> functions</a>
+  <ul class="collapse">
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><code>select()</code></a></li>
+  <li><a href="#arrange" id="toc-arrange" class="nav-link" data-scroll-target="#arrange"><code>arrange()</code></a></li>
+  <li><a href="#rename" id="toc-rename" class="nav-link" data-scroll-target="#rename"><code>rename()</code></a></li>
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><code>mutate()</code></a></li>
+  <li><a href="#separate" id="toc-separate" class="nav-link" data-scroll-target="#separate"><code>separate()</code></a></li>
+  <li><a href="#filter-bonus-str_detect" id="toc-filter-bonus-str_detect" class="nav-link" data-scroll-target="#filter-bonus-str_detect"><code>filter()</code> (bonus <code>str_detect()</code>)</a></li>
+  </ul></li>
+  <li><a href="#pipes-are-the-best" id="toc-pipes-are-the-best" class="nav-link" data-scroll-target="#pipes-are-the-best">Pipes (Are the Best)</a>
+  <ul class="collapse">
+  <li><a href="#case_match" id="toc-case_match" class="nav-link" data-scroll-target="#case_match"><code>case_match()</code></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#relational-joins" id="toc-relational-joins" class="nav-link" data-scroll-target="#relational-joins"><span class="toc-section-number">4</span>  <strong>Relational Joins</strong></a></li>
+  <li><a href="#grouping-summarizing-data" id="toc-grouping-summarizing-data" class="nav-link" data-scroll-target="#grouping-summarizing-data"><span class="toc-section-number">5</span>  <strong>Grouping &amp; Summarizing Data</strong></a>
   <ul class="collapse">
   <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by"><code>group_by()</code></a></li>
   <li><a href="#summarize" id="toc-summarize" class="nav-link" data-scroll-target="#summarize"><code>summarize()</code></a></li>
   </ul></li>
-  <li><a href="#ifelse-statements" id="toc-ifelse-statements" class="nav-link" data-scroll-target="#ifelse-statements"><span class="toc-section-number">5</span>  <strong>If/Else Statements</strong></a></li>
-  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><span class="toc-section-number">6</span>  <strong>For Loops</strong></a></li>
-  <li><a href="#t-tests" id="toc-t-tests" class="nav-link" data-scroll-target="#t-tests"><span class="toc-section-number">7</span>  <strong>T-Tests</strong></a></li>
-  <li><a href="#figures-in-r" id="toc-figures-in-r" class="nav-link" data-scroll-target="#figures-in-r"><span class="toc-section-number">8</span>  <strong>Figures in R</strong></a></li>
+  <li><a href="#ifelse-statements" id="toc-ifelse-statements" class="nav-link" data-scroll-target="#ifelse-statements"><span class="toc-section-number">6</span>  <strong>If/Else Statements</strong></a></li>
+  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><span class="toc-section-number">7</span>  <strong>For Loops</strong></a></li>
+  <li><a href="#t-tests" id="toc-t-tests" class="nav-link" data-scroll-target="#t-tests"><span class="toc-section-number">8</span>  <strong>T-Tests</strong></a></li>
+  <li><a href="#figures-in-r" id="toc-figures-in-r" class="nav-link" data-scroll-target="#figures-in-r"><span class="toc-section-number">9</span>  <strong>Figures in R</strong></a></li>
   </ul>
 </nav>
 </div>
@@ -2656,7 +2673,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 15, 2023</p>
+      <p class="date">March 16, 2023</p>
     </div>
   </div>
   
@@ -2728,7 +2745,7 @@ vertical-align: -.125em;
 </figure>
 </div>
 <ul>
-<li><p>Now that you’ve created a project, you can always access it using the Project drop-down menu in the right side of <em>RStudio</em>. The menu will display the currently open/active project. Check to make sure the project for this tutorial is open to ensure functionality of upcoming code.</p></li>
+<li><p>Now that you’ve created a project, you can always access it using the Project drop-down menu in the right side of <em>RStudio</em>. The menu will display the currently open/active project. Check to make sure your project for this tutorial is open to ensure functionality of upcoming code.</p></li>
 <li><p>You can directly access files and folders in your open project through the Files tab in <em>RStudio</em>. Very convenient!</p></li>
 </ul>
 </section>
@@ -2756,7 +2773,7 @@ vertical-align: -.125em;
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><font size="4"> Download data from the web directly into your project directory, then import. </font></p>
+<p><font size="4"> Enter the following code into your new script to download data from the web and directly into your project directory. Then, import it. </font></p>
 </div>
 </div>
 <div class="cell">
@@ -2884,22 +2901,369 @@ vertical-align: -.125em;
 <p>See those Conflict messages? Those show up because different package creators sometimes use the same word when naming functions with different applications. When calling a function with a conflicting name, e.g., <code>filter()</code>, <em>RStudio</em> will automatically use the version of the function from the most recently loaded library, in this case <code>dplyr</code>, which is part of <code>tidyverse</code>. If you want to use a different version of the function in your script, you can specify it by putting the package name in front of two colons and the function title, e.g., <code>stats::filter(your_data_here)</code> will override <code>filter(your_data_here)</code> from the <code>dplyr</code> package after loading <code>tidyverse</code>.</p>
 </section>
 </section>
-<section id="enter-the-tidyverse" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> <strong>Enter the Tidyverse</strong></h1>
-<p>Great! You can now use the <code>tidyverse</code> to create and process “tidy” data, which boils down to making sure your data are organized with one value per cell and one cell per column and row. That way there’s no confusion between values contained in a cell or what they mean. This greatly streamlines data workflows.</p>
-<p>To learn more about tidy data and the <code>tidyverse</code>, do yourself a big favor and explore the resources available at <a href="https://www.tidyverse.org/learn/" class="uri">https://www.tidyverse.org/learn/</a> and the <a href="https://posit.co/resources/cheatsheets/?type=posit-cheatsheets&amp;_page=2/">RStudio cheatsheets</a> for tidyverse packages.</p>
+<section id="welcome-to-the-tidyverse" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> <strong>Welcome to the Tidyverse</strong></h1>
+<section id="about" class="level2">
+<h2 class="anchored" data-anchor-id="about">About</h2>
+<p>Great! You can now use the <code>tidyverse</code> to create and process “tidy” data, which boils down to making sure your data are organized with one value per cell and one cell per column and row. Storing your data this way greatly streamlines munging and analysis workflows.</p>
+<p>The <code>tidyverse</code> has a lot of strengths over base <em>R</em>. The most obvious of which that you can benefit from almost immediately are that it…</p>
+<ol type="1">
+<li>reduces repetitive wordiness (like constantly having to supply your data and your data$column names) while…</li>
+<li>simultaneously targeting user-specified data in dynamically moving data sets.</li>
+<li>And on top of that, it allows you to quickly and clearly string together functions in an obvious order without having to constantly create and reference new objects or wrap 10 functions inside of one another! More on this in the <strong>pipes</strong> section below.</li>
+</ol>
+<p>Here are the <code>tidyverse</code> packages you now have access to and their basic purposes. When you’re working with your own data and come across a complex roadblock, see if your situation can be solved by the tools in one of these packages:</p>
 <ul>
-<li>What is it</li>
-<li>Vs. “base” R</li>
-<li>Component packages</li>
-<li>https://www.tidyverse.org/learn/</li>
-<li>Pipelines</li>
-<li>Cheatsheet(s) - from RSTudio? Source?</li>
-<li>Useful functions</li>
+<li><code>tidyr</code>
+<ul>
+<li>Tools for reshaping your data to make it tidy. Too many values in a cell? Should your rows be columns or vice versa? This is how you get your data to where it needs to be for analysis.</li>
+</ul></li>
+<li><code>dplyr</code>
+<ul>
+<li>Common data manipulation tools for making changes to a single data set and/or comparing and combining multiple data sets.</li>
+</ul></li>
+<li><code>stringr</code>
+<ul>
+<li>A great toolbox for working with strings, aka non-numeric character data. Find, replace, mutate, subset, combine/separate and more.</li>
+</ul></li>
+<li><code>ggplot2</code>
+<ul>
+<li>The gold standard for creating beautiful plots and figures in <em>R</em>.</li>
+</ul></li>
+<li><code>purrr</code>
+<ul>
+<li>Powerful tools for applying functions to multiple vectors, columns, or lists of data at once.</li>
+</ul></li>
+<li><code>forcats</code>
+<ul>
+<li>Tools for working with <strong>factor</strong> variables, i.e., categorical data like treatment or forest type.</li>
+</ul></li>
+<li><code>tibble</code>
+<ul>
+<li>Functions for working with <strong>tibbles</strong>, which are what the <code>tidyverse</code> calls its new and improved versions of data frames. They’re largely interchangeable and conversions happen behind the scenes, so you generally don’t need to worry about it. If you see tibble, think data frame.</li>
+</ul></li>
+<li><code>readr</code>
+<ul>
+<li>For importing tabular data in more exotic or complicated formats.</li>
+</ul></li>
 </ul>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<font size="5"> Note </font>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="4"> To learn more about tidy data and the <code>tidyverse</code>, explore the resources available at <a href="https://www.tidyverse.org/learn/" class="uri">https://www.tidyverse.org/learn/</a> and the <a href="https://posit.co/resources/cheatsheets/?type=posit-cheatsheets&amp;_page=2/">RStudio cheatsheets</a> for <code>tidyverse</code> packages. </font></p>
+</div>
+</div>
 </section>
-<section id="grouping-summarizing-data" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> <strong>Grouping &amp; Summarizing Data</strong></h1>
+<section id="popular-tidyverse-functions" class="level2">
+<h2 class="anchored" data-anchor-id="popular-tidyverse-functions">Popular <code>tidyverse</code> functions</h2>
+<p><code>tidyverse</code> functions work pretty much the same as functions from base <em>R</em>. Supply a function with data, feed it any necessary arguments, and put the result into a container object:</p>
+<p><code>object -&gt; my.function(data, argument = desired_manipulation)</code></p>
+<p>Below we’ll create a smaller data frame to test functions on, making sure not to overwrite it (meaning don’t set it equal to anything with <code>&lt;-</code>). This way, changes we make aren’t stored and we can continue to manipulate the smaller test object, getting expected – but <em>temporary</em> – results every time.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<font size="5"> Try it </font>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="4"> Familiarize yourself with some of the most common and useful functions in the <code>tidyverse</code>. </font></p>
+</div>
+</div>
+<section id="select" class="level3">
+<h3 class="anchored" data-anchor-id="select"><code>select()</code></h3>
+<p>A useful function and removing or reordering columns by name. Specifying column names rather than column number ensures you select the right data even when columns switch places.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Tidyverse functions ----</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Before we begin, let&#39;s save a smaller data set to practice with using what we learned in Intro to R, part I</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>small_birds <span class="ot">&lt;-</span> birds[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">12</span><span class="sc">:</span><span class="dv">13</span>, <span class="dv">22</span><span class="sc">:</span><span class="dv">23</span>),]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, remind yourself of the column names and their order</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(small_birds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;species&quot;        &quot;family&quot;         &quot;wing_length_mm&quot; &quot;mass_g&quot;        
+[5] &quot;mass_to_wing&quot;  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select() allows you to select columns to keep.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># You can also reorder them at the same time.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we select three columns from the birds data frame, moving family before species: </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(small_birds, family, species, mass_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       family          species mass_g
+1  Falconidae American Kestrel  108.7
+2  Falconidae American Kestrel  111.2
+12   Corvidae    American Crow  455.7
+13   Corvidae    American Crow  460.0
+22   Turdidae   American Robin   72.1
+23   Turdidae   American Robin   84.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can also specify columns to remove by putting a minus or hyphen in front of their names</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(small_birds, <span class="sc">-</span>species, <span class="sc">-</span>family)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   wing_length_mm mass_g mass_to_wing
+1           175.3  108.7         0.62
+2           179.2  111.2         0.62
+12          295.7  455.7         1.54
+13          279.7  460.0         1.64
+22          120.8   72.1         0.60
+23          135.4   84.1         0.62</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combining with c() to remove a list of columns</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(small_birds, <span class="sc">-</span><span class="fu">c</span>(family, mass_g, mass_to_wing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species wing_length_mm
+1  American Kestrel          175.3
+2  American Kestrel          179.2
+12    American Crow          295.7
+13    American Crow          279.7
+22   American Robin          120.8
+23   American Robin          135.4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: There are several additional ways to select columns based on things like column class and starting letter. See the help section for more.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="arrange" class="level3">
+<h3 class="anchored" data-anchor-id="arrange"><code>arrange()</code></h3>
+<p>This function can be used to sort your data alphabetically or numerically</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Arranging by wing_length_mm</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(small_birds, wing_length_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1   American Robin   Turdidae          120.8   72.1         0.60
+2   American Robin   Turdidae          135.4   84.1         0.62
+3 American Kestrel Falconidae          175.3  108.7         0.62
+4 American Kestrel Falconidae          179.2  111.2         0.62
+5    American Crow   Corvidae          279.7  460.0         1.64
+6    American Crow   Corvidae          295.7  455.7         1.54</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Notice that arrange sorted by ascending order.</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrap your column name in the desc() function to sort from largest to smallest</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(small_birds, <span class="fu">desc</span>(wing_length_mm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1    American Crow   Corvidae          295.7  455.7         1.54
+2    American Crow   Corvidae          279.7  460.0         1.64
+3 American Kestrel Falconidae          179.2  111.2         0.62
+4 American Kestrel Falconidae          175.3  108.7         0.62
+5   American Robin   Turdidae          135.4   84.1         0.62
+6   American Robin   Turdidae          120.8   72.1         0.60</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># It works the same with character class columns</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(small_birds, <span class="fu">desc</span>(species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1   American Robin   Turdidae          120.8   72.1         0.60
+2   American Robin   Turdidae          135.4   84.1         0.62
+3 American Kestrel Falconidae          175.3  108.7         0.62
+4 American Kestrel Falconidae          179.2  111.2         0.62
+5    American Crow   Corvidae          295.7  455.7         1.54
+6    American Crow   Corvidae          279.7  460.0         1.64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And you can sort by multiple columns, too.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># For example, you could sort alphabetically by species name first and then by largest to smallest wing length for each species.</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(small_birds, species, <span class="fu">desc</span>(wing_length_mm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1    American Crow   Corvidae          295.7  455.7         1.54
+2    American Crow   Corvidae          279.7  460.0         1.64
+3 American Kestrel Falconidae          179.2  111.2         0.62
+4 American Kestrel Falconidae          175.3  108.7         0.62
+5   American Robin   Turdidae          135.4   84.1         0.62
+6   American Robin   Turdidae          120.8   72.1         0.60</code></pre>
+</div>
+</div>
+</section>
+<section id="rename" class="level3">
+<h3 class="anchored" data-anchor-id="rename"><code>rename()</code></h3>
+<p>A quick and easy way to rename your columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we&#39;ll temporarily rename our column names. It&#39;s temporary because we haven&#39;t overwritten our object with &lt;-</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: In your arguments, new name must precede old name. It won&#39;t work if you put the old name before the new name.</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(small_birds, <span class="at">wing =</span> wing_length_mm, <span class="at">weight =</span> mass_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species     family  wing weight mass_to_wing
+1  American Kestrel Falconidae 175.3  108.7         0.62
+2  American Kestrel Falconidae 179.2  111.2         0.62
+12    American Crow   Corvidae 295.7  455.7         1.54
+13    American Crow   Corvidae 279.7  460.0         1.64
+22   American Robin   Turdidae 120.8   72.1         0.60
+23   American Robin   Turdidae 135.4   84.1         0.62</code></pre>
+</div>
+</div>
+</section>
+<section id="mutate" class="level3">
+<h3 class="anchored" data-anchor-id="mutate"><code>mutate()</code></h3>
+<p>A broad method to “create, modify, and delete columns”. This is one of the most important functions in the <code>tidyverse</code>. When you start making permanent changes to your data, you’ll likely use this one a lot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use mutate to create new columns using existing columns.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># They&#39;ll get tacked on to the end of your data frame.</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Just create a new column name and set it equal to whatever you want. Here, we&#39;ll convert wing length in mm to cm.</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(small_birds, <span class="at">wing_cm =</span> wing_length_mm <span class="sc">/</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species     family wing_length_mm mass_g mass_to_wing wing_cm
+1  American Kestrel Falconidae          175.3  108.7         0.62   17.53
+2  American Kestrel Falconidae          179.2  111.2         0.62   17.92
+12    American Crow   Corvidae          295.7  455.7         1.54   29.57
+13    American Crow   Corvidae          279.7  460.0         1.64   27.97
+22   American Robin   Turdidae          120.8   72.1         0.60   12.08
+23   American Robin   Turdidae          135.4   84.1         0.62   13.54</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or you can alter existing columns by setting them equal to an altered version of themselves.</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Here, we&#39;ll set replace the family column by setting it equal to a capitalized version of itself.</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(small_birds, <span class="at">family =</span> <span class="fu">str_to_upper</span>(family))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species     family wing_length_mm mass_g mass_to_wing
+1  American Kestrel FALCONIDAE          175.3  108.7         0.62
+2  American Kestrel FALCONIDAE          179.2  111.2         0.62
+12    American Crow   CORVIDAE          295.7  455.7         1.54
+13    American Crow   CORVIDAE          279.7  460.0         1.64
+22   American Robin   TURDIDAE          120.8   72.1         0.60
+23   American Robin   TURDIDAE          135.4   84.1         0.62</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: str_to_upper() is also part of the tidyverse! it comes from the stringr package.</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># You can also remove columns by setting them equal to NULL, which has the same effect as using select(-column_name)</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(small_birds, <span class="at">family =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species wing_length_mm mass_g mass_to_wing
+1  American Kestrel          175.3  108.7         0.62
+2  American Kestrel          179.2  111.2         0.62
+12    American Crow          295.7  455.7         1.54
+13    American Crow          279.7  460.0         1.64
+22   American Robin          120.8   72.1         0.60
+23   American Robin          135.4   84.1         0.62</code></pre>
+</div>
+</div>
+</section>
+<section id="separate" class="level3">
+<h3 class="anchored" data-anchor-id="separate"><code>separate()</code></h3>
+<p>A common problem with untidy data is too many values per cell. <code>separate()</code> is one function to break down a very simple multi-value cell into its component parts, but there are many more options for more complex situations in <code>tidyr</code> to look into if needed. The inverse of <code>separate()</code> is <code>unite()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In this scenario, we want to break up the species column into its component parts assigning one word to each column. Conveniently for us, there are currently two words in each row of the &quot;species&quot; column, so this will be straightforward.</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Name the data you&#39;d like to alter, specify the column (species), then name the new columns you&#39;d like to separate species into, then define the separating character (there&#39;s a single space between American and next word, so that&#39;s a natural separator to pick).</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">separate</span>(small_birds, species, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;Descriptor&quot;</span>, <span class="st">&quot;Bird&quot;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Descriptor    Bird     family wing_length_mm mass_g mass_to_wing
+1    American Kestrel Falconidae          175.3  108.7         0.62
+2    American Kestrel Falconidae          179.2  111.2         0.62
+12   American    Crow   Corvidae          295.7  455.7         1.54
+13   American    Crow   Corvidae          279.7  460.0         1.64
+22   American   Robin   Turdidae          120.8   72.1         0.60
+23   American   Robin   Turdidae          135.4   84.1         0.62</code></pre>
+</div>
+</div>
+</section>
+<section id="filter-bonus-str_detect" class="level3">
+<h3 class="anchored" data-anchor-id="filter-bonus-str_detect"><code>filter()</code> (bonus <code>str_detect()</code>)</h3>
+<p>This function is nearly identical to <code>subset()</code>, a base <em>R</em> function you saw in part I that allows you to reduce your data set down to just those rows meeting a specified criteria. The biggest difference is that <code>filter()</code>, as part of the <code>tidyverse</code>, can be strung together with other <code>tidyverse</code> functions. You’ll see examples of this coming up next in the pipes section.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter() works the same way as subset().</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Here are some easy examples</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(small_birds, species <span class="sc">!=</span> <span class="st">&quot;American Crow&quot;</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(small_birds, mass_g <span class="sc">&gt;=</span> <span class="dv">110</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1 American Kestrel Falconidae          175.3  108.7         0.62
+2 American Kestrel Falconidae          179.2  111.2         0.62
+3   American Robin   Turdidae          120.8   72.1         0.60
+4   American Robin   Turdidae          135.4   84.1         0.62</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           species     family wing_length_mm mass_g mass_to_wing
+1 American Kestrel Falconidae          179.2  111.2         0.62
+2    American Crow   Corvidae          295.7  455.7         1.54
+3    American Crow   Corvidae          279.7  460.0         1.64</code></pre>
+</div>
+</div>
+<p>Okay, here’s a more complex example where we return only species names that contain the letters “ro” by combining <code>filter()</code> with <code>str_detect()</code>, another tidyverse function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This should return Crows and Robins, but notice that the &quot;r&quot; is capitalized in Robin and not Crow.</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># str_detect() is sensitive to capitalization, so before we search for the &quot;ro&quot; string, we can convert all letters in the species column to lowercase using str_to_lower(). </span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(small_birds, <span class="fu">str_detect</span>(<span class="fu">str_to_lower</span>(species), <span class="st">&quot;ro&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         species   family wing_length_mm mass_g mass_to_wing
+1  American Crow Corvidae          295.7  455.7         1.54
+2  American Crow Corvidae          279.7  460.0         1.64
+3 American Robin Turdidae          120.8   72.1         0.60
+4 American Robin Turdidae          135.4   84.1         0.62</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="pipes-are-the-best" class="level2">
+<h2 class="anchored" data-anchor-id="pipes-are-the-best">Pipes (Are the Best)</h2>
+<p>Finally! We’ve made it to the pipes!</p>
+<section id="case_match" class="level3">
+<h3 class="anchored" data-anchor-id="case_match"><code>case_match()</code></h3>
+<p>This function allows you to replace matching values in a column while leaving the rest unchanged.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we&#39;ll replace all common names with their scientific names</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species =</span> <span class="fu">case_match</span>(species, </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                              <span class="st">&quot;American Kestrel&quot;</span> <span class="sc">~</span> <span class="st">&quot;F. sparverius&quot;</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                              <span class="st">&quot;American Crow&quot;</span> <span class="sc">~</span> <span class="st">&quot;C. brachyrhynchos&quot;</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>                              <span class="st">&quot;American Robin&quot;</span> <span class="sc">~</span> <span class="st">&quot;T. migratorius&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             species     family wing_length_mm mass_g mass_to_wing
+1      F. sparverius Falconidae          175.3  108.7         0.62
+2      F. sparverius Falconidae          179.2  111.2         0.62
+12 C. brachyrhynchos   Corvidae          295.7  455.7         1.54
+13 C. brachyrhynchos   Corvidae          279.7  460.0         1.64
+22    T. migratorius   Turdidae          120.8   72.1         0.60
+23    T. migratorius   Turdidae          135.4   84.1         0.62</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If you don&#39;t want to replace all values, you can set non-target values to their existing, default value.</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># You can replace multiple values with a single value, too.</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species =</span> <span class="fu">case_match</span>(species,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">c</span>(<span class="st">&quot;American Kestrel&quot;</span>, </span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>                               <span class="st">&quot;American Robin&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Not A Crow&quot;</span>,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">.default =</span> species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         species     family wing_length_mm mass_g mass_to_wing
+1     Not A Crow Falconidae          175.3  108.7         0.62
+2     Not A Crow Falconidae          179.2  111.2         0.62
+12 American Crow   Corvidae          295.7  455.7         1.54
+13 American Crow   Corvidae          279.7  460.0         1.64
+22    Not A Crow   Turdidae          120.8   72.1         0.60
+23    Not A Crow   Turdidae          135.4   84.1         0.62</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># It works with numbers, too!</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mass_to_wing =</span> <span class="fu">case_match</span>(mass_to_wing,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="fl">0.62</span> <span class="sc">~</span> <span class="fl">0.65</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">.default =</span> mass_to_wing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            species     family wing_length_mm mass_g mass_to_wing
+1  American Kestrel Falconidae          175.3  108.7         0.65
+2  American Kestrel Falconidae          179.2  111.2         0.65
+12    American Crow   Corvidae          295.7  455.7         1.54
+13    American Crow   Corvidae          279.7  460.0         1.64
+22   American Robin   Turdidae          120.8   72.1         0.60
+23   American Robin   Turdidae          135.4   84.1         0.65</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="relational-joins" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> <strong>Relational Joins</strong></h1>
+</section>
+<section id="grouping-summarizing-data" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> <strong>Grouping &amp; Summarizing Data</strong></h1>
 <section id="group_by" class="level2">
 <h2 class="anchored" data-anchor-id="group_by"><code>group_by()</code></h2>
 <ul>
@@ -2913,17 +3277,17 @@ vertical-align: -.125em;
 </ul>
 </section>
 </section>
-<section id="ifelse-statements" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> <strong>If/Else Statements</strong></h1>
+<section id="ifelse-statements" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> <strong>If/Else Statements</strong></h1>
 </section>
-<section id="for-loops" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> <strong>For Loops</strong></h1>
+<section id="for-loops" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> <strong>For Loops</strong></h1>
 </section>
-<section id="t-tests" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> <strong>T-Tests</strong></h1>
+<section id="t-tests" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> <strong>T-Tests</strong></h1>
 </section>
-<section id="figures-in-r" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> <strong>Figures in R</strong></h1>
+<section id="figures-in-r" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> <strong>Figures in R</strong></h1>
 <ul>
 <li>r-graphs-gallery</li>
 <li>ggplot</li>
