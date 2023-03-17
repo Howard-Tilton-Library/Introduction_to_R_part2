@@ -1,7 +1,7 @@
 ---
 title: "Intro to Coding in R, Part II: Management, Processing & Analysis"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "16 March 2023"
+date: "17 March 2023"
 
 format: 
   html:
@@ -229,9 +229,9 @@ Great! You can now use the `tidyverse` to create and process "tidy" data, which 
 
 The `tidyverse` has a lot of strengths over base *R*. The most obvious of which that you can benefit from almost immediately are that it...
 
-1.    reduces repetitive wordiness (like constantly having to supply your data and your data$column names) while...
-2.    simultaneously targeting user-specified data in dynamically moving data sets.
-3.    And on top of that, it allows you to quickly and clearly string together functions in an obvious order without having to constantly create and reference new objects or wrap 10 functions inside of one another! More on this in the **pipes** section below.
+1.  reduces repetitive wordiness (like constantly having to supply your data and your data\$column names) while...
+2.  simultaneously targeting user-specified data in dynamically moving data sets.
+3.  And on top of that, it allows you to quickly and clearly string together functions in an obvious order without having to constantly create and reference new objects or wrap 10 functions inside of one another! More on this in the **pipes** section below.
 
 Here are the `tidyverse` packages you now have access to and their basic purposes. When you're working with your own data and come across a complex roadblock, see if your situation can be solved by the tools in one of these packages:
 
@@ -613,20 +613,137 @@ filter(small_birds, str_detect(str_to_lower(species), "ro"))
 :::
 
 
-
 ## Pipes (Are the Best)
 
-Finally! We've made it to the pipes!
+### About
 
-### `case_match()`
+Finally! We've made it to the pipes! We've saved the best of the `tidyverse` for last because it helps to familiarize yourself with some `tidyverse` functions before you start piping them. **Pipes** tell *R* to *"send the object or output preceding this pipe through to the next function."*
 
-This function allows you to replace matching values in a column while leaving the rest unchanged.
+The `tidyverse` packages use a special operator, **`%>%`**, to signify the pipe. When you see **`%>%`**, think of the things plumbers work with. Data flow through code pipes just like water flows through physical pipes -- from beginning to end.
+
+Pipes have a number of major benefits:
+
+1. They allow you to send the output of one function directly into another function. This greatly streamlines your workflow by eliminating the need to constantly save and call objects. That means less typing and less code to read.
+2. Less saving and calling of objects means less room for error when referencing the nth iteration of an object you've altered. 
+3. They also allow you to combine functions in a fast, transparent way. This means you can run 10 or more functions at once without wrapping them inside a million parentheses. Instead, you can read them like normal text in most languages: from left to right and top to bottom.
+4. Lastly, pipes unlock useful analytic and processing tools like the ability to group and summarize data!
+
+<br>
+In essence, pipes take you from this...
+
+`object_2 -> f_1(object_1)` <br> `object_3 -> f_2(object_2)` <br> `object_4 -> f_3(object_3)` <br> `...` <br> `object_y -> f_x(object_x)`
+
+<br>
+
+To this...
+
+![](Data_In/Figures/piping.png){width="500" height="30"}
+
+### Practice
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Practice using pipes to combine functions and process data. </font>
+:::
 
 
 ::: {.cell}
 
 ```{.r .cell-code}
-# Here we'll replace all common names with their scientific names
+# Pipe Practice ----
+
+# At it's most basic, you can pipe objects into a single function.
+# Pipe small_birds into select() to reduce columns.
+# NOTE: The %>% pipe tells R that small_birds is being fed into select(), therefore you don't have to put the object name inside the function parentheses. Now, all you need to put in the function are the arguments!
+small_birds %>% 
+  select(species, wing_length_mm)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+            species wing_length_mm
+1  American Kestrel          175.3
+2  American Kestrel          179.2
+12    American Crow          295.7
+13    American Crow          279.7
+22   American Robin          120.8
+23   American Robin          135.4
+```
+:::
+
+```{.r .cell-code}
+# Now let's add to the pipeline.
+  # Pipe small_birds into select().
+  # Next, pipe the output of select() into arrange().
+  # Notice how the final output contains the effects of both functions.
+small_birds %>% 
+  select(species, wing_length_mm) %>%
+  arrange(species, desc(wing_length_mm))
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+           species wing_length_mm
+1    American Crow          295.7
+2    American Crow          279.7
+3 American Kestrel          179.2
+4 American Kestrel          175.3
+5   American Robin          135.4
+6   American Robin          120.8
+```
+:::
+
+```{.r .cell-code}
+# You can carry on this way for as long as you'd like.
+  # Pipe small_birds into the select()
+  # Select the species and wing length columns, then pipe the output to arrange()
+  # Sort by species and then descending wing length, then pipe to mutate()
+  # Use mutate() to add a column converting wing length to cm rounded to the nearest whole number, then pipe to filter()
+  # Finally, filter out all individuals with wing length less than 14cm
+small_birds %>%
+  select(species, wing_length_mm) %>%
+  arrange(species, desc(wing_length_mm)) %>%
+  mutate(wing_cm = round(wing_length_mm / 10)) %>%
+  filter(wing_cm >= 14)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+           species wing_length_mm wing_cm
+1    American Crow          295.7      30
+2    American Crow          279.7      28
+3 American Kestrel          179.2      18
+4 American Kestrel          175.3      18
+5   American Robin          135.4      14
+```
+:::
+:::
+
+
+::: callout-warning
+## <font size="5"> Not Working? </font>
+
+<font size="4"> Most errors and unexpected results when piping mean one of two things:
+
+  1. You broke your pipeline by forgetting a pipe operator (`%>%`) somewhere in the middle after one of your functions.
+  2. You put a pipe (`%>%`) at the end of the last function in your pipeline. Pipelines must end, so if you put `%>%` after your last function, *R* will keep searching and searching for more functions to run!
+
+</font>
+:::
+
+
+### `case_match()`
+
+Piping makes it easier to use more complex, but incredibly useful, functions. One example is `case_match()`. This function allows you to replace matching values in a column while leaving the rest unchanged.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Here we'll replace all common names with their scientific names.
+# To do so, pipe your data into mutate()
+# Mutate the species column by setting it equal to an altered version of itself in which you replace common names with scientific names using case_match().
 small_birds %>% 
   mutate(species = case_match(species, 
                               "American Kestrel" ~ "F. sparverius",
@@ -690,8 +807,6 @@ small_birds %>%
 :::
 
 
-# **Relational Joins**
-
 # **Grouping & Summarizing Data**
 
 ## `group_by()`
@@ -701,6 +816,8 @@ small_birds %>%
 ## `summarize()`
 
 -   n(), mean(), sd(), min(), max()
+
+# **Relational Joins**
 
 # **If/Else Statements**
 
