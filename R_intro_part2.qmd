@@ -23,6 +23,7 @@ format:
     linestretch: 1.25
     fontsize: "large"
     embed-resources: true
+    df-print: paged
 
 execute:
   echo: true
@@ -79,7 +80,7 @@ Great! Now that you've got a project up and running, start a new R script for th
 
 ## Add data to project, import
 
-We'll need some data to work on for this tutorial. Let's use the data we created in Part I of this tutorial. If you don't have it handy, you can download it directly from the web using `download.file()`.
+We'll need some data to work on for this tutorial. I've added some additional rows to the data we created in Part I of this tutorial to highlight some new functions. You can download these new data directly from the web and into *RStudio* using `download.file()`.
 
 When you're working in a Project, R automatically sets it as your working directory! That means you don't have to type out the entire path to access your project folder or the files therein.
 
@@ -112,10 +113,10 @@ You may need to slightly alter the `destfile =` argument depending on whether or
 #| eval: false
 
 # I have a sub-folder in my project called "Data_In" and therefore need to specify that location before my chosen file name.
-download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71000172", destfile = "Data_In/intro2_bird_data.csv")
+download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71057769", destfile = "Data_In/intro2_bird_data.csv")
 
 # If you don't have a similar sub-folder, you only need to provide destfile with a file name. It will automatically save to your project folder.
-download.file("https://libguides.tulane.edu/ld.php?content_id=71000172", "intro2_bird_data.csv")
+download.file("https://libguides.tulane.edu/ld.php?content_id=71057769", "intro2_bird_data.csv")
 ```
 
 These data should now appear in your *RStudio* files pane. Let's go ahead and import them.
@@ -269,8 +270,14 @@ select(small_birds, -species, -family)
 # Combining with c() to remove a list of columns
 select(small_birds, -c(family, mass_g, mass_to_wing))
 
-# NOTE: There are several additional ways to select columns based on things like column class and starting letter. See the help section for more.
+
 ```
+
+::: callout-note
+## <font size="5"> Note </font>
+
+<font size="4"> There are several additional ways to select columns based on things like variable class and starting letter. Run `?select` for more info. If you're only looking to reorder columns, also check out the help page for `relocate()`! </font>
+:::
 
 ### `arrange()`
 
@@ -342,9 +349,9 @@ A common problem with untidy data is too many values per cell. `separate()` is o
 separate(small_birds, species, into = c("Descriptor", "Bird"), sep = " ")
 ```
 
-### `filter()` (bonus `str_detect()`)
+### `filter()` (lagniappe `str_detect()`)
 
-This function is nearly identical to `subset()`, a base *R* function you saw in part I that allows you to reduce your data set down to just those rows meeting a specified criteria. The biggest difference is that `filter()`, as part of the `tidyverse`, can be strung together with other `tidyverse` functions. You'll see examples of this coming up next in the pipes section.
+This function is nearly identical to `subset()`, a base *R* function you saw in part I that allows you to reduce your data set down to just those rows meeting a specified criteria. The biggest difference is that `filter()`, as part of the `tidyverse`, can be strung together with other `tidyverse` functions. You'll see examples of this coming up in the pipes section.
 
 ```{r}
 #| label: filter
@@ -372,23 +379,70 @@ Okay, here's a more complex example where we return only species names that cont
 filter(small_birds, str_detect(str_to_lower(species), "ro"))
 ```
 
+### `count()`
+
+A handy function for counting the number of observations (aka rows) for each group (aka levels of a categorical variable). For example, our data include two categorical variables: family and species. We can use `count()` to determine the number of rows per species and per family.
+
+The benefits of this function are better highlighted with our full data set, so we'll use `birds` here instead of `small_birds`.
+
+```{r}
+#| label: count
+
+# count() returns the number of rows in each level of a categorical variable.
+# How many observations, or rows, are in each family?
+count(birds, family)
+
+# How many observations do we have of each species?
+# We can use the "sort" argument to arrange from most rows to fewest.
+count(birds, species, sort = TRUE)
+
+# You can also count by multiple groups, e.g., how many rows are in each species in each family?
+# In this case, it yields the same results as the previous code, though sorting it will split up families, so we'll avoid that here.
+count(birds, family, species)
+```
+
+### `summarize()`
+
+This function can be used to generate multiple summary statistics at once. You can feed it any summary statistic and apply it to whichever column you want. There are even more advanced options to apply the summary statistics to multiple columns.
+
+This can be useful at the level of the entire data set, but it's even more powerful when it's applied to grouped data! More on that soon. For now, test it out on the whole `birds` data set.
+
+```{r}
+
+# Create summary statistics with summarize()
+# Here we're summarizing all species lumped together.
+# You probably recognize most of these functions
+  # n() gives your sample size
+  # mean() gives your arithmetic mean
+  # sd() gives standard deviation
+  # min() gives the smallest value
+  # max() gives the largest value
+  # median() gives your sample size
+summarize(birds,
+          observations = n(),
+          wing_average = mean(wing_length_mm),
+          wing_sd = sd(wing_length_mm),
+          mass_min = min(mass_g),
+          mass_max = max(mass_g),
+          mass_median = median(mass_g))
+
+# NOTE: You're not limited to these statistics! The help section for summarize() lists more, but you can also come up with your own!
+```
+
 ## Pipes (Are the Best)
 
 ### About
 
-Finally! We've made it to the pipes! We've saved the best of the `tidyverse` for last because it helps to familiarize yourself with some `tidyverse` functions before you start piping them. **Pipes** tell *R* to *"send the object or output preceding this pipe through to the next function."*
-
-The `tidyverse` packages use a special operator, **`%>%`**, to signify the pipe. When you see **`%>%`**, think of the things plumbers work with. Data flow through code pipes just like water flows through physical pipes -- from beginning to end.
+Now that you've familiarized yourself with some of the useful `tidyverse` functions, it's time to learn how to combine them! **Pipes** tell *R* to *"send the object or output preceding this pipe through to the next function."* The `tidyverse` packages use a special operator, **`%>%`**, to signify the pipe. When you see **`%>%`**, think of the things plumbers work with. Data flow through code pipes just like water flows through physical pipes -- from beginning to end.
 
 Pipes have a number of major benefits:
 
-1. They allow you to send the output of one function directly into another function. This greatly streamlines your workflow by eliminating the need to constantly save and call objects. That means less typing and less code to read.
-2. Less saving and calling of objects means less room for error when referencing the nth iteration of an object you've altered. 
-3. They also allow you to combine functions in a fast, transparent way. This means you can run 10 or more functions at once without wrapping them inside a million parentheses. Instead, you can read them like normal text in most languages: from left to right and top to bottom.
-4. Lastly, pipes unlock useful analytic and processing tools like the ability to group and summarize data!
+1.  They allow you to send the output of one function directly into another function. This greatly streamlines your workflow by eliminating the need to constantly save and call objects. That means less typing and less code to read.
+2.  Less saving and calling of objects means less room for error when referencing the nth iteration of an object you've altered.
+3.  Pipes also allow you to combine functions in a fast, transparent way. This means you can run 10 or more functions at once without wrapping them inside a million parentheses. Instead, you can read them like normal text in most languages: from left to right and top to bottom.
+4.  Lastly, pipes unlock useful analytic and processing tools like the ability to group and summarize data!
 
-<br>
-In essence, pipes take you from this...
+<br> In essence, pipes take you from this...
 
 `object_2 -> f_1(object_1)` <br> `object_3 -> f_2(object_2)` <br> `object_4 -> f_3(object_3)` <br> `...` <br> `object_y -> f_x(object_x)`
 
@@ -417,7 +471,7 @@ To this...
 small_birds %>% 
   select(species, wing_length_mm)
 
-# Now let's add to the pipeline.
+# Let's add to that to create a longer pipeline.
   # Pipe small_birds into select().
   # Next, pipe the output of select() into arrange().
   # Notice how the final output contains the effects of both functions.
@@ -426,11 +480,11 @@ small_birds %>%
   arrange(species, desc(wing_length_mm))
 
 # You can carry on this way for as long as you'd like.
-  # Pipe small_birds into the select()
+  # Pipe small_birds into select()
   # Select the species and wing length columns, then pipe the output to arrange()
-  # Sort by species and then descending wing length, then pipe to mutate()
+  # Sort by species and then descending wing length with arrange(), then pipe to mutate()
   # Use mutate() to add a column converting wing length to cm rounded to the nearest whole number, then pipe to filter()
-  # Finally, filter out all individuals with wing length less than 14cm
+  # Finally, filter out all individuals with wing length less than 14cm.
 small_birds %>%
   select(species, wing_length_mm) %>%
   arrange(species, desc(wing_length_mm)) %>%
@@ -443,12 +497,11 @@ small_birds %>%
 
 <font size="4"> Most errors and unexpected results when piping mean one of two things:
 
-  1. You broke your pipeline by forgetting a pipe operator (`%>%`) somewhere in the middle after one of your functions.
-  2. You put a pipe (`%>%`) at the end of the last function in your pipeline. Pipelines must end, so if you put `%>%` after your last function, *R* will keep searching and searching for more functions to run!
+1.  You broke your pipeline by forgetting a pipe operator (`%>%`) somewhere in the middle after one of your functions.
+2.  You put a pipe (`%>%`) at the end of the last function in your pipeline. Pipelines must end, so if you put `%>%` after your last function, *R* will keep searching and searching for more functions to run!
 
 </font>
 :::
-
 
 ### `case_match()`
 
@@ -484,15 +537,207 @@ small_birds %>%
 
 # **Grouping & Summarizing Data**
 
+You've now had a brief introduction to grouped data with `count()`, and you've also seen how *R* can be used to summarize data. The `tidyverse` and its pipes make it easy to *summarize your data by group*. Think about this as calculating the same statistics on each level of a categorical variable rather than all of the levels lumped together. If we want to find average body sizes for every single species, we can do that all at once!
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Practice grouping and summarizing our full data set by group. </font>
+:::
+
 ## `group_by()`
 
--   example with count or something
+```{r}
+#| label: groups
+#| eval: false
+
+# Grouping & Summarizing ----
+
+# We used count() above to determine the number of observations per family.
+# In that instance, we basically defined species as a group! 
+count(birds, family, species)
+
+# group_by() makes defining a group more explicit.
+# Here we pipe birds into group_by, which defines two groups: 1 = family, 2 = species
+# Next, we pipe our grouped data into count(). Because it's already grouped, we don't need to type a group into count(). The %>% pipe tells count() to count number of rows based on our family and species groups.
+birds %>%
+  group_by(family, species) %>%
+  count()
+
+# NOTE: Same results!
+# The only differences are that our output now tells us our groups, and tidyverse converts to a tibble, which is just a fancy data frame.
+```
+
+```{r}
+#| label: groups2
+#| ref.label: groups
+#| echo: false
+```
 
 ## `summarize()`
 
--   n(), mean(), sd(), min(), max()
+In the code chunk above, using `group_by()` was a bit less efficient than using `count()` on its own, but it highlighted how groups work in the `tidyverse`. They really shine when combined with `summarize()`. This function can pump out just about any statistic you can dream up for a group of data. Test it for yourself!
+
+```{r}
+#| label: summarize
+#| message: false
+
+# Use summarize to find the rounded means of each family
+birds %>%
+  group_by(family) %>%
+  summarize(n = n(),
+            avg_mass = round(mean(mass_g), 1),
+            avg_wing = round(mean(wing_length_mm), 1),
+            avg_mtow = round(mean(mass_to_wing), 1))
+
+```
+
+After summarizing your data, you can ungroup your output by piping it into `ungroup()`. Then, you can continue processing!
+
+```{r}
+#| label: summarize2
+#| message: false
+
+# Now calculate means for each species.
+# Pipe summary output into ungroup() to ungroup it.
+# Pipe ungrouped output into arrange() to sort it by descending species mass within each family.
+birds %>%
+  group_by(family, species) %>%
+  summarize(n = n(),
+            avg_mass = round(mean(mass_g), 1),
+            avg_wing = round(mean(wing_length_mm), 1),
+            avg_mtow = round(mean(mass_to_wing), 1)) %>%
+  ungroup() %>%
+  arrange(family, desc(avg_mass))
+
+
+# We've now determined the number of observations for each family and each species using count(), but what if we want to see how many species are in each family?
+# n_distinct() provides the number of different observations in each group while n() provides the number of all observations in each group.
+birds %>% 
+  group_by(family) %>% 
+  summarize(n_species = n_distinct(species),
+            n_individuals = n())
+```
 
 # **Relational Joins**
+
+Folks often work with more than one data set, and sometimes you'll need to combine information into a single data frame. But you usually want to combine based on a relationship between the two. Imagine you have the following data sets:
+
+::: {#tbl-panel layout-ncol=2}
+
+| Patient   | Medication |
+|-----------|------------|
+| Patient 1 | Meds X     |
+| Patient 2 | Meds Y     |
+| Patient 3 | Meds Z     |
+
+: Medication Treatment {#tbl-first}
+
+| Patient       | Reaction  |
+|---------------|-----------|
+| *Patient 3*   | *Died*    |
+| Patient 2     | Recovered |
+| Patient 1     | Recovered |
+
+: Medication Response {#tbl-second}
+
+Medication Trials
+:::
+
+If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this. You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue!
+
+| Patient   | Medication | Reaction    |
+|-----------|------------|-------------|
+| Patient 1 | Meds X     | *Died*      |
+| Patient 2 | Meds Y     | Recovered   |
+| Patient 3 | Meds Z     | Recovered   |
+
+Relational joins solve this issue by defining a relationship between rows in multiple data frames, then adding in the appropriate data based on matching values, not order. 
+
+There are several types of relational joins; we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left hand.
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Download and import some new data, then use a relational join to combine it with our existing data. </font>
+:::
+
+```{r}
+#| label: joins
+
+# Relational Joins ----
+
+# Goal: Make a single column for scientific names by
+  # 1. Matching common names and joining genus and species names from a second data set.
+  # 2. Uniting the species names genus and species columns into a single column.
+
+# First, download the new data to your project directory. Remove the sub-folder if you don't have one, or edit it if it's different from mine.
+download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71057889", destfile = "Data_In/intro2_bird_names.csv")
+
+# Next, import and examine the data
+names <- read.csv("Data_In/intro2_bird_names.csv")
+
+str(names)
+```
+
+Notice that our new data has fewer rows (only 10) and several species that aren't found in the data we've been working with. We want the information from the "genus" and "species" columns, but not all of it. We only want scientific names for the species in the data set we're working with. 
+
+```{r}
+#| label: joins2
+#| eval: false
+
+# The arguments left_join() must have are...
+  # 1. x = left hand data
+  # 2. y = right hand data
+  # 3. by = join_by(column to match and join by)
+
+# NOTE: All columns will be added from the new data frame. Are there any column naming conflicts?
+colnames(birds)
+colnames(names)
+```
+
+```{r}
+#| label: joins3
+#| ref-label: joins2
+#| echo: false
+```
+
+```{r}
+#| label: joins4
+
+# Let's rename the species column in the birds object to avoid importing a second column named species.
+# We can rename it "common_name" to match up with the same column in the names object.
+birds <- birds %>%
+  rename(common_name = species)
+
+# To make the join permanent, create a new object equal to an altered version of birds with <- 
+  # Pipe birds into the left_join function
+  # The pipe tells left_join() that x = birds
+  # supply y, in this case y = names
+  # join_by the column with the shared name
+  # pipe the joined data into unite() to combine the genus and species columns
+  # pipe into select() to rearrange the order of the columns.
+birds2 <- birds %>%
+  left_join(names, by = join_by(common_name)) %>%
+  unite(latin_name, c("genus", "species"), sep = " ") %>%
+  select(common_name, latin_name, family:mass_to_wing)
+
+```
+
+::: callout-note
+## <font size="5"> Note </font>
+
+<font size="4"> Because we created a new object above (`birds2`), if you're feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,
+
+`birds %>% left_join()`
+
+`birds %>% left_join() %>% unite()`
+
+`birds %>% left_join() %>% unite() %>% select()`
+
+</font>
+:::
+
 
 # **If/Else Statements**
 

@@ -1,7 +1,7 @@
 ---
 title: "Intro to Coding in R, Part II: Management, Processing & Analysis"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "17 March 2023"
+date: "18 March 2023"
 
 format: 
   html:
@@ -23,6 +23,7 @@ format:
     linestretch: 1.25
     fontsize: "large"
     embed-resources: true
+    df-print: paged
 
 execute:
   echo: true
@@ -81,7 +82,7 @@ Great! Now that you've got a project up and running, start a new R script for th
 
 ## Add data to project, import
 
-We'll need some data to work on for this tutorial. Let's use the data we created in Part I of this tutorial. If you don't have it handy, you can download it directly from the web using `download.file()`.
+We'll need some data to work on for this tutorial. I've added some additional rows to the data we created in Part I of this tutorial to highlight some new functions. You can download these new data directly from the web and into *RStudio* using `download.file()`.
 
 When you're working in a Project, R automatically sets it as your working directory! That means you don't have to type out the entire path to access your project folder or the files therein.
 
@@ -116,10 +117,10 @@ You may need to slightly alter the `destfile =` argument depending on whether or
 
 ```{.r .cell-code}
 # I have a sub-folder in my project called "Data_In" and therefore need to specify that location before my chosen file name.
-download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71000172", destfile = "Data_In/intro2_bird_data.csv")
+download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71057769", destfile = "Data_In/intro2_bird_data.csv")
 
 # If you don't have a similar sub-folder, you only need to provide destfile with a file name. It will automatically save to your project folder.
-download.file("https://libguides.tulane.edu/ld.php?content_id=71000172", "intro2_bird_data.csv")
+download.file("https://libguides.tulane.edu/ld.php?content_id=71057769", "intro2_bird_data.csv")
 ```
 :::
 
@@ -303,16 +304,16 @@ colnames(small_birds)
 select(small_birds, family, species, mass_g)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-       family          species mass_g
-1  Falconidae American Kestrel  108.7
-2  Falconidae American Kestrel  111.2
-12   Corvidae    American Crow  455.7
-13   Corvidae    American Crow  460.0
-22   Turdidae   American Robin   72.1
-23   Turdidae   American Robin   84.1
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["mass_g"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Falconidae","2":"American Kestrel","3":"108.7","_rn_":"1"},{"1":"Falconidae","2":"American Kestrel","3":"111.2","_rn_":"2"},{"1":"Corvidae","2":"American Crow","3":"455.7","_rn_":"12"},{"1":"Corvidae","2":"American Crow","3":"460.0","_rn_":"13"},{"1":"Turdidae","2":"American Robin","3":"72.1","_rn_":"22"},{"1":"Turdidae","2":"American Robin","3":"84.1","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -320,16 +321,16 @@ select(small_birds, family, species, mass_g)
 select(small_birds, -species, -family)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-   wing_length_mm mass_g mass_to_wing
-1           175.3  108.7         0.62
-2           179.2  111.2         0.62
-12          295.7  455.7         1.54
-13          279.7  460.0         1.64
-22          120.8   72.1         0.60
-23          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["wing_length_mm"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"175.3","2":"108.7","3":"0.62","_rn_":"1"},{"1":"179.2","2":"111.2","3":"0.62","_rn_":"2"},{"1":"295.7","2":"455.7","3":"1.54","_rn_":"12"},{"1":"279.7","2":"460.0","3":"1.64","_rn_":"13"},{"1":"120.8","2":"72.1","3":"0.60","_rn_":"22"},{"1":"135.4","2":"84.1","3":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -337,23 +338,25 @@ select(small_birds, -species, -family)
 select(small_birds, -c(family, mass_g, mass_to_wing))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species wing_length_mm
-1  American Kestrel          175.3
-2  American Kestrel          179.2
-12    American Crow          295.7
-13    American Crow          279.7
-22   American Robin          120.8
-23   American Robin          135.4
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"175.3","_rn_":"1"},{"1":"American Kestrel","2":"179.2","_rn_":"2"},{"1":"American Crow","2":"295.7","_rn_":"12"},{"1":"American Crow","2":"279.7","_rn_":"13"},{"1":"American Robin","2":"120.8","_rn_":"22"},{"1":"American Robin","2":"135.4","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
 :::
 
-```{.r .cell-code}
-# NOTE: There are several additional ways to select columns based on things like column class and starting letter. See the help section for more.
-```
-:::
 
+::: callout-note
+## <font size="5"> Note </font>
+
+<font size="4"> There are several additional ways to select columns based on things like variable class and starting letter. Run `?select` for more info. If you're only looking to reorder columns, also check out the help page for `relocate()`! </font>
+:::
 
 ### `arrange()`
 
@@ -367,16 +370,16 @@ This function can be used to sort your data alphabetically or numerically
 arrange(small_birds, wing_length_mm)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1   American Robin   Turdidae          120.8   72.1         0.60
-2   American Robin   Turdidae          135.4   84.1         0.62
-3 American Kestrel Falconidae          175.3  108.7         0.62
-4 American Kestrel Falconidae          179.2  111.2         0.62
-5    American Crow   Corvidae          279.7  460.0         1.64
-6    American Crow   Corvidae          295.7  455.7         1.54
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -385,16 +388,16 @@ arrange(small_birds, wing_length_mm)
 arrange(small_birds, desc(wing_length_mm))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1    American Crow   Corvidae          295.7  455.7         1.54
-2    American Crow   Corvidae          279.7  460.0         1.64
-3 American Kestrel Falconidae          179.2  111.2         0.62
-4 American Kestrel Falconidae          175.3  108.7         0.62
-5   American Robin   Turdidae          135.4   84.1         0.62
-6   American Robin   Turdidae          120.8   72.1         0.60
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -402,16 +405,16 @@ arrange(small_birds, desc(wing_length_mm))
 arrange(small_birds, desc(species))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1   American Robin   Turdidae          120.8   72.1         0.60
-2   American Robin   Turdidae          135.4   84.1         0.62
-3 American Kestrel Falconidae          175.3  108.7         0.62
-4 American Kestrel Falconidae          179.2  111.2         0.62
-5    American Crow   Corvidae          295.7  455.7         1.54
-6    American Crow   Corvidae          279.7  460.0         1.64
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -420,16 +423,16 @@ arrange(small_birds, desc(species))
 arrange(small_birds, species, desc(wing_length_mm))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1    American Crow   Corvidae          295.7  455.7         1.54
-2    American Crow   Corvidae          279.7  460.0         1.64
-3 American Kestrel Falconidae          179.2  111.2         0.62
-4 American Kestrel Falconidae          175.3  108.7         0.62
-5   American Robin   Turdidae          135.4   84.1         0.62
-6   American Robin   Turdidae          120.8   72.1         0.60
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
@@ -447,16 +450,16 @@ A quick and easy way to rename your columns.
 rename(small_birds, wing = wing_length_mm, weight = mass_g)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species     family  wing weight mass_to_wing
-1  American Kestrel Falconidae 175.3  108.7         0.62
-2  American Kestrel Falconidae 179.2  111.2         0.62
-12    American Crow   Corvidae 295.7  455.7         1.54
-13    American Crow   Corvidae 279.7  460.0         1.64
-22   American Robin   Turdidae 120.8   72.1         0.60
-23   American Robin   Turdidae 135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62","_rn_":"2"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54","_rn_":"12"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64","_rn_":"13"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60","_rn_":"22"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
@@ -475,16 +478,16 @@ A broad method to "create, modify, and delete columns". This is one of the most 
 mutate(small_birds, wing_cm = wing_length_mm / 10)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species     family wing_length_mm mass_g mass_to_wing wing_cm
-1  American Kestrel Falconidae          175.3  108.7         0.62   17.53
-2  American Kestrel Falconidae          179.2  111.2         0.62   17.92
-12    American Crow   Corvidae          295.7  455.7         1.54   29.57
-13    American Crow   Corvidae          279.7  460.0         1.64   27.97
-22   American Robin   Turdidae          120.8   72.1         0.60   12.08
-23   American Robin   Turdidae          135.4   84.1         0.62   13.54
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["wing_cm"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62","6":"17.53","_rn_":"1"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62","6":"17.92","_rn_":"2"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54","6":"29.57","_rn_":"12"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64","6":"27.97","_rn_":"13"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60","6":"12.08","_rn_":"22"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62","6":"13.54","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -493,16 +496,16 @@ mutate(small_birds, wing_cm = wing_length_mm / 10)
 mutate(small_birds, family = str_to_upper(family))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species     family wing_length_mm mass_g mass_to_wing
-1  American Kestrel FALCONIDAE          175.3  108.7         0.62
-2  American Kestrel FALCONIDAE          179.2  111.2         0.62
-12    American Crow   CORVIDAE          295.7  455.7         1.54
-13    American Crow   CORVIDAE          279.7  460.0         1.64
-22   American Robin   TURDIDAE          120.8   72.1         0.60
-23   American Robin   TURDIDAE          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"FALCONIDAE","3":"175.3","4":"108.7","5":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"FALCONIDAE","3":"179.2","4":"111.2","5":"0.62","_rn_":"2"},{"1":"American Crow","2":"CORVIDAE","3":"295.7","4":"455.7","5":"1.54","_rn_":"12"},{"1":"American Crow","2":"CORVIDAE","3":"279.7","4":"460.0","5":"1.64","_rn_":"13"},{"1":"American Robin","2":"TURDIDAE","3":"120.8","4":"72.1","5":"0.60","_rn_":"22"},{"1":"American Robin","2":"TURDIDAE","3":"135.4","4":"84.1","5":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -512,16 +515,16 @@ mutate(small_birds, family = str_to_upper(family))
 mutate(small_birds, family = NULL)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species wing_length_mm mass_g mass_to_wing
-1  American Kestrel          175.3  108.7         0.62
-2  American Kestrel          179.2  111.2         0.62
-12    American Crow          295.7  455.7         1.54
-13    American Crow          279.7  460.0         1.64
-22   American Robin          120.8   72.1         0.60
-23   American Robin          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"175.3","3":"108.7","4":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"179.2","3":"111.2","4":"0.62","_rn_":"2"},{"1":"American Crow","2":"295.7","3":"455.7","4":"1.54","_rn_":"12"},{"1":"American Crow","2":"279.7","3":"460.0","4":"1.64","_rn_":"13"},{"1":"American Robin","2":"120.8","3":"72.1","4":"0.60","_rn_":"22"},{"1":"American Robin","2":"135.4","3":"84.1","4":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
@@ -539,23 +542,23 @@ A common problem with untidy data is too many values per cell. `separate()` is o
 separate(small_birds, species, into = c("Descriptor", "Bird"), sep = " ")
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-   Descriptor    Bird     family wing_length_mm mass_g mass_to_wing
-1    American Kestrel Falconidae          175.3  108.7         0.62
-2    American Kestrel Falconidae          179.2  111.2         0.62
-12   American    Crow   Corvidae          295.7  455.7         1.54
-13   American    Crow   Corvidae          279.7  460.0         1.64
-22   American   Robin   Turdidae          120.8   72.1         0.60
-23   American   Robin   Turdidae          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Descriptor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Bird"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American","2":"Kestrel","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American","2":"Kestrel","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American","2":"Crow","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American","2":"Crow","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American","2":"Robin","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American","2":"Robin","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
 
-### `filter()` (bonus `str_detect()`)
+### `filter()` (lagniappe `str_detect()`)
 
-This function is nearly identical to `subset()`, a base *R* function you saw in part I that allows you to reduce your data set down to just those rows meeting a specified criteria. The biggest difference is that `filter()`, as part of the `tidyverse`, can be strung together with other `tidyverse` functions. You'll see examples of this coming up next in the pipes section.
+This function is nearly identical to `subset()`, a base *R* function you saw in part I that allows you to reduce your data set down to just those rows meeting a specified criteria. The biggest difference is that `filter()`, as part of the `tidyverse`, can be strung together with other `tidyverse` functions. You'll see examples of this coming up in the pipes section.
 
 
 ::: {.cell}
@@ -569,23 +572,28 @@ filter(small_birds, mass_g >= 110)
 :::
 
 ::: {.cell}
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1 American Kestrel Falconidae          175.3  108.7         0.62
-2 American Kestrel Falconidae          179.2  111.2         0.62
-3   American Robin   Turdidae          120.8   72.1         0.60
-4   American Robin   Turdidae          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
-::: {.cell-output .cell-output-stdout}
-```
-           species     family wing_length_mm mass_g mass_to_wing
-1 American Kestrel Falconidae          179.2  111.2         0.62
-2    American Crow   Corvidae          295.7  455.7         1.54
-3    American Crow   Corvidae          279.7  460.0         1.64
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
@@ -601,15 +609,128 @@ Okay, here's a more complex example where we return only species names that cont
 filter(small_birds, str_detect(str_to_lower(species), "ro"))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-         species   family wing_length_mm mass_g mass_to_wing
-1  American Crow Corvidae          295.7  455.7         1.54
-2  American Crow Corvidae          279.7  460.0         1.64
-3 American Robin Turdidae          120.8   72.1         0.60
-4 American Robin Turdidae          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
+:::
+
+
+### `count()`
+
+A handy function for counting the number of observations (aka rows) for each group (aka levels of a categorical variable). For example, our data include two categorical variables: family and species. We can use `count()` to determine the number of rows per species and per family.
+
+The benefits of this function are better highlighted with our full data set, so we'll use `birds` here instead of `small_birds`.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# count() returns the number of rows in each level of a categorical variable.
+# How many observations, or rows, are in each family?
+count(birds, family)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Corvidae","2":"33"},{"1":"Falconidae","2":"11"},{"1":"Turdidae","2":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+```{.r .cell-code}
+# How many observations do we have of each species?
+# We can use the "sort" argument to arrange from most rows to fewest.
+count(birds, species, sort = TRUE)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Blue Jay","2":"12"},{"1":"American Kestrel","2":"11"},{"1":"Fish Crow","2":"11"},{"1":"American Crow","2":"10"},{"1":"American Robin","2":"10"},{"1":"Eastern Bluebird","2":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+```{.r .cell-code}
+# You can also count by multiple groups, e.g., how many rows are in each species in each family?
+# In this case, it yields the same results as the previous code, though sorting it will split up families, so we'll avoid that here.
+count(birds, family, species)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"Corvidae","2":"American Crow","3":"10"},{"1":"Corvidae","2":"Blue Jay","3":"12"},{"1":"Corvidae","2":"Fish Crow","3":"11"},{"1":"Falconidae","2":"American Kestrel","3":"11"},{"1":"Turdidae","2":"American Robin","3":"10"},{"1":"Turdidae","2":"Eastern Bluebird","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+### `summarize()`
+
+This function can be used to generate multiple summary statistics at once. You can feed it any summary statistic and apply it to whichever column you want. There are even more advanced options to apply the summary statistics to multiple columns.
+
+This can be useful at the level of the entire data set, but it's even more powerful when it's applied to grouped data! More on that soon. For now, test it out on the whole `birds` data set.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Create summary statistics with summarize()
+# Here we're summarizing all species lumped together.
+# You probably recognize most of these functions
+  # n() gives your sample size
+  # mean() gives your arithmetic mean
+  # sd() gives standard deviation
+  # min() gives the smallest value
+  # max() gives the largest value
+  # median() gives your sample size
+summarize(birds,
+          observations = n(),
+          wing_average = mean(wing_length_mm),
+          wing_sd = sd(wing_length_mm),
+          mass_min = min(mass_g),
+          mass_max = max(mass_g),
+          mass_median = median(mass_g))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["observations"],"name":[1],"type":["int"],"align":["right"]},{"label":["wing_average"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["wing_sd"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_min"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_max"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_median"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"63","2":"186.6175","3":"75.87526","4":"25","5":"508.5","6":"106.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+```{.r .cell-code}
+# NOTE: You're not limited to these statistics! The help section for summarize() lists more, but you can also come up with your own!
+```
 :::
 
 
@@ -617,19 +738,16 @@ filter(small_birds, str_detect(str_to_lower(species), "ro"))
 
 ### About
 
-Finally! We've made it to the pipes! We've saved the best of the `tidyverse` for last because it helps to familiarize yourself with some `tidyverse` functions before you start piping them. **Pipes** tell *R* to *"send the object or output preceding this pipe through to the next function."*
-
-The `tidyverse` packages use a special operator, **`%>%`**, to signify the pipe. When you see **`%>%`**, think of the things plumbers work with. Data flow through code pipes just like water flows through physical pipes -- from beginning to end.
+Now that you've familiarized yourself with some of the useful `tidyverse` functions, it's time to learn how to combine them! **Pipes** tell *R* to *"send the object or output preceding this pipe through to the next function."* The `tidyverse` packages use a special operator, **`%>%`**, to signify the pipe. When you see **`%>%`**, think of the things plumbers work with. Data flow through code pipes just like water flows through physical pipes -- from beginning to end.
 
 Pipes have a number of major benefits:
 
-1. They allow you to send the output of one function directly into another function. This greatly streamlines your workflow by eliminating the need to constantly save and call objects. That means less typing and less code to read.
-2. Less saving and calling of objects means less room for error when referencing the nth iteration of an object you've altered. 
-3. They also allow you to combine functions in a fast, transparent way. This means you can run 10 or more functions at once without wrapping them inside a million parentheses. Instead, you can read them like normal text in most languages: from left to right and top to bottom.
-4. Lastly, pipes unlock useful analytic and processing tools like the ability to group and summarize data!
+1.  They allow you to send the output of one function directly into another function. This greatly streamlines your workflow by eliminating the need to constantly save and call objects. That means less typing and less code to read.
+2.  Less saving and calling of objects means less room for error when referencing the nth iteration of an object you've altered.
+3.  Pipes also allow you to combine functions in a fast, transparent way. This means you can run 10 or more functions at once without wrapping them inside a million parentheses. Instead, you can read them like normal text in most languages: from left to right and top to bottom.
+4.  Lastly, pipes unlock useful analytic and processing tools like the ability to group and summarize data!
 
-<br>
-In essence, pipes take you from this...
+<br> In essence, pipes take you from this...
 
 `object_2 -> f_1(object_1)` <br> `object_3 -> f_2(object_2)` <br> `object_4 -> f_3(object_3)` <br> `...` <br> `object_y -> f_x(object_x)`
 
@@ -660,20 +778,20 @@ small_birds %>%
   select(species, wing_length_mm)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species wing_length_mm
-1  American Kestrel          175.3
-2  American Kestrel          179.2
-12    American Crow          295.7
-13    American Crow          279.7
-22   American Robin          120.8
-23   American Robin          135.4
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"175.3","_rn_":"1"},{"1":"American Kestrel","2":"179.2","_rn_":"2"},{"1":"American Crow","2":"295.7","_rn_":"12"},{"1":"American Crow","2":"279.7","_rn_":"13"},{"1":"American Robin","2":"120.8","_rn_":"22"},{"1":"American Robin","2":"135.4","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
-# Now let's add to the pipeline.
+# Let's add to that to create a longer pipeline.
   # Pipe small_birds into select().
   # Next, pipe the output of select() into arrange().
   # Notice how the final output contains the effects of both functions.
@@ -682,25 +800,25 @@ small_birds %>%
   arrange(species, desc(wing_length_mm))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species wing_length_mm
-1    American Crow          295.7
-2    American Crow          279.7
-3 American Kestrel          179.2
-4 American Kestrel          175.3
-5   American Robin          135.4
-6   American Robin          120.8
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Crow","2":"295.7"},{"1":"American Crow","2":"279.7"},{"1":"American Kestrel","2":"179.2"},{"1":"American Kestrel","2":"175.3"},{"1":"American Robin","2":"135.4"},{"1":"American Robin","2":"120.8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
 # You can carry on this way for as long as you'd like.
-  # Pipe small_birds into the select()
+  # Pipe small_birds into select()
   # Select the species and wing length columns, then pipe the output to arrange()
-  # Sort by species and then descending wing length, then pipe to mutate()
+  # Sort by species and then descending wing length with arrange(), then pipe to mutate()
   # Use mutate() to add a column converting wing length to cm rounded to the nearest whole number, then pipe to filter()
-  # Finally, filter out all individuals with wing length less than 14cm
+  # Finally, filter out all individuals with wing length less than 14cm.
 small_birds %>%
   select(species, wing_length_mm) %>%
   arrange(species, desc(wing_length_mm)) %>%
@@ -708,15 +826,16 @@ small_birds %>%
   filter(wing_cm >= 14)
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-           species wing_length_mm wing_cm
-1    American Crow          295.7      30
-2    American Crow          279.7      28
-3 American Kestrel          179.2      18
-4 American Kestrel          175.3      18
-5   American Robin          135.4      14
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["wing_cm"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Crow","2":"295.7","3":"30"},{"1":"American Crow","2":"279.7","3":"28"},{"1":"American Kestrel","2":"179.2","3":"18"},{"1":"American Kestrel","2":"175.3","3":"18"},{"1":"American Robin","2":"135.4","3":"14"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
@@ -726,12 +845,11 @@ small_birds %>%
 
 <font size="4"> Most errors and unexpected results when piping mean one of two things:
 
-  1. You broke your pipeline by forgetting a pipe operator (`%>%`) somewhere in the middle after one of your functions.
-  2. You put a pipe (`%>%`) at the end of the last function in your pipeline. Pipelines must end, so if you put `%>%` after your last function, *R* will keep searching and searching for more functions to run!
+1.  You broke your pipeline by forgetting a pipe operator (`%>%`) somewhere in the middle after one of your functions.
+2.  You put a pipe (`%>%`) at the end of the last function in your pipeline. Pipelines must end, so if you put `%>%` after your last function, *R* will keep searching and searching for more functions to run!
 
 </font>
 :::
-
 
 ### `case_match()`
 
@@ -751,16 +869,16 @@ small_birds %>%
                               "American Robin" ~ "T. migratorius"))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-             species     family wing_length_mm mass_g mass_to_wing
-1      F. sparverius Falconidae          175.3  108.7         0.62
-2      F. sparverius Falconidae          179.2  111.2         0.62
-12 C. brachyrhynchos   Corvidae          295.7  455.7         1.54
-13 C. brachyrhynchos   Corvidae          279.7  460.0         1.64
-22    T. migratorius   Turdidae          120.8   72.1         0.60
-23    T. migratorius   Turdidae          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"F. sparverius","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62","_rn_":"1"},{"1":"F. sparverius","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62","_rn_":"2"},{"1":"C. brachyrhynchos","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54","_rn_":"12"},{"1":"C. brachyrhynchos","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64","_rn_":"13"},{"1":"T. migratorius","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60","_rn_":"22"},{"1":"T. migratorius","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -773,16 +891,16 @@ small_birds %>%
                              .default = species))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-         species     family wing_length_mm mass_g mass_to_wing
-1     Not A Crow Falconidae          175.3  108.7         0.62
-2     Not A Crow Falconidae          179.2  111.2         0.62
-12 American Crow   Corvidae          295.7  455.7         1.54
-13 American Crow   Corvidae          279.7  460.0         1.64
-22    Not A Crow   Turdidae          120.8   72.1         0.60
-23    Not A Crow   Turdidae          135.4   84.1         0.62
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Not A Crow","2":"Falconidae","3":"175.3","4":"108.7","5":"0.62","_rn_":"1"},{"1":"Not A Crow","2":"Falconidae","3":"179.2","4":"111.2","5":"0.62","_rn_":"2"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54","_rn_":"12"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64","_rn_":"13"},{"1":"Not A Crow","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60","_rn_":"22"},{"1":"Not A Crow","2":"Turdidae","3":"135.4","4":"84.1","5":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 
 ```{.r .cell-code}
@@ -793,31 +911,297 @@ small_birds %>%
                                    .default = mass_to_wing))
 ```
 
-::: {.cell-output .cell-output-stdout}
-```
-            species     family wing_length_mm mass_g mass_to_wing
-1  American Kestrel Falconidae          175.3  108.7         0.65
-2  American Kestrel Falconidae          179.2  111.2         0.65
-12    American Crow   Corvidae          295.7  455.7         1.54
-13    American Crow   Corvidae          279.7  460.0         1.64
-22   American Robin   Turdidae          120.8   72.1         0.60
-23   American Robin   Turdidae          135.4   84.1         0.65
-```
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["family"],"name":[2],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Falconidae","3":"175.3","4":"108.7","5":"0.65","_rn_":"1"},{"1":"American Kestrel","2":"Falconidae","3":"179.2","4":"111.2","5":"0.65","_rn_":"2"},{"1":"American Crow","2":"Corvidae","3":"295.7","4":"455.7","5":"1.54","_rn_":"12"},{"1":"American Crow","2":"Corvidae","3":"279.7","4":"460.0","5":"1.64","_rn_":"13"},{"1":"American Robin","2":"Turdidae","3":"120.8","4":"72.1","5":"0.60","_rn_":"22"},{"1":"American Robin","2":"Turdidae","3":"135.4","4":"84.1","5":"0.65","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
 :::
 :::
 
 
 # **Grouping & Summarizing Data**
 
+You've now had a brief introduction to grouped data with `count()`, and you've also seen how *R* can be used to summarize data. The `tidyverse` and its pipes make it easy to *summarize your data by group*. Think about this as calculating the same statistics on each level of a categorical variable rather than all of the levels lumped together. If we want to find average body sizes for every single species, we can do that all at once!
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Practice grouping and summarizing our full data set by group. </font>
+:::
+
 ## `group_by()`
 
--   example with count or something
+
+::: {.cell}
+
+```{.r .cell-code}
+# Grouping & Summarizing ----
+
+# We used count() above to determine the number of observations per family.
+# In that instance, we basically defined species as a group! 
+count(birds, family, species)
+
+# group_by() makes defining a group more explicit.
+# Here we pipe birds into group_by, which defines two groups: 1 = family, 2 = species
+# Next, we pipe our grouped data into count(). Because it's already grouped, we don't need to type a group into count(). The %>% pipe tells count() to count number of rows based on our family and species groups.
+birds %>%
+  group_by(family, species) %>%
+  count()
+
+# NOTE: Same results!
+# The only differences are that our output now tells us our groups, and tidyverse converts to a tibble, which is just a fancy data frame.
+```
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"Corvidae","2":"American Crow","3":"10"},{"1":"Corvidae","2":"Blue Jay","3":"12"},{"1":"Corvidae","2":"Fish Crow","3":"11"},{"1":"Falconidae","2":"American Kestrel","3":"11"},{"1":"Turdidae","2":"American Robin","3":"10"},{"1":"Turdidae","2":"Eastern Bluebird","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"Corvidae","2":"American Crow","3":"10"},{"1":"Corvidae","2":"Blue Jay","3":"12"},{"1":"Corvidae","2":"Fish Crow","3":"11"},{"1":"Falconidae","2":"American Kestrel","3":"11"},{"1":"Turdidae","2":"American Robin","3":"10"},{"1":"Turdidae","2":"Eastern Bluebird","3":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
 
 ## `summarize()`
 
--   n(), mean(), sd(), min(), max()
+In the code chunk above, using `group_by()` was a bit less efficient than using `count()` on its own, but it highlighted how groups work in the `tidyverse`. They really shine when combined with `summarize()`. This function can pump out just about any statistic you can dream up for a group of data. Test it for yourself!
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Use summarize to find the rounded means of each family
+birds %>%
+  group_by(family) %>%
+  summarize(n = n(),
+            avg_mass = round(mean(mass_g), 1),
+            avg_wing = round(mean(wing_length_mm), 1),
+            avg_mtow = round(mean(mass_to_wing), 1))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]},{"label":["avg_mass"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["avg_wing"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["avg_mtow"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Corvidae","2":"33","3":"263.6","4":"229.4","5":"1.1"},{"1":"Falconidae","2":"11","3":"115.3","4":"184.4","5":"0.6"},{"1":"Turdidae","2":"19","3":"55.6","4":"113.5","5":"0.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+After summarizing your data, you can ungroup your output by piping it into `ungroup()`. Then, you can continue processing!
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Now calculate means for each species.
+# Pipe summary output into ungroup() to ungroup it.
+# Pipe ungrouped output into arrange() to sort it by descending species mass within each family.
+birds %>%
+  group_by(family, species) %>%
+  summarize(n = n(),
+            avg_mass = round(mean(mass_g), 1),
+            avg_wing = round(mean(wing_length_mm), 1),
+            avg_mtow = round(mean(mass_to_wing), 1)) %>%
+  ungroup() %>%
+  arrange(family, desc(avg_mass))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["species"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n"],"name":[3],"type":["int"],"align":["right"]},{"label":["avg_mass"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["avg_wing"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["avg_mtow"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Corvidae","2":"American Crow","3":"10","4":"441.3","5":"284.8","6":"1.5"},{"1":"Corvidae","2":"Fish Crow","3":"11","4":"292.9","5":"284.2","6":"1.0"},{"1":"Corvidae","2":"Blue Jay","3":"12","4":"88.8","5":"133.1","6":"0.7"},{"1":"Falconidae","2":"American Kestrel","3":"11","4":"115.3","5":"184.4","6":"0.6"},{"1":"Turdidae","2":"American Robin","3":"10","4":"81.3","5":"132.0","6":"0.6"},{"1":"Turdidae","2":"Eastern Bluebird","3":"9","4":"27.0","5":"93.0","6":"0.3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+```{.r .cell-code}
+# We've now determined the number of observations for each family and each species using count(), but what if we want to see how many species are in each family?
+# n_distinct() provides the number of different observations in each group while n() provides the number of all observations in each group.
+birds %>% 
+  group_by(family) %>% 
+  summarize(n_species = n_distinct(species),
+            n_individuals = n())
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["family"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n_species"],"name":[2],"type":["int"],"align":["right"]},{"label":["n_individuals"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"Corvidae","2":"3","3":"33"},{"1":"Falconidae","2":"1","3":"11"},{"1":"Turdidae","2":"2","3":"19"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
 
 # **Relational Joins**
+
+Folks often work with more than one data set, and sometimes you'll need to combine information into a single data frame. But you usually want to combine based on a relationship between the two. Imagine you have the following data sets:
+
+::: {#tbl-panel layout-ncol=2}
+
+| Patient   | Medication |
+|-----------|------------|
+| Patient 1 | Meds X     |
+| Patient 2 | Meds Y     |
+| Patient 3 | Meds Z     |
+
+: Medication Treatment {#tbl-first}
+
+| Patient       | Reaction  |
+|---------------|-----------|
+| *Patient 3*   | *Died*    |
+| Patient 2     | Recovered |
+| Patient 1     | Recovered |
+
+: Medication Response {#tbl-second}
+
+Medication Trials
+:::
+
+If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this. You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue!
+
+| Patient   | Medication | Reaction    |
+|-----------|------------|-------------|
+| Patient 1 | Meds X     | *Died*      |
+| Patient 2 | Meds Y     | Recovered   |
+| Patient 3 | Meds Z     | Recovered   |
+
+Relational joins solve this issue by defining a relationship between rows in multiple data frames, then adding in the appropriate data based on matching values, not order. 
+
+There are several types of relational joins; we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left hand.
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Download and import some new data, then use a relational join to combine it with our existing data. </font>
+:::
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Relational Joins ----
+
+# Goal: Make a single column for scientific names by
+  # 1. Matching common names and joining genus and species names from a second data set.
+  # 2. Uniting the species names genus and species columns into a single column.
+
+# First, download the new data to your project directory. Remove the sub-folder if you don't have one, or edit it if it's different from mine.
+download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71057889", destfile = "Data_In/intro2_bird_names.csv")
+
+# Next, import and examine the data
+names <- read.csv("Data_In/intro2_bird_names.csv")
+
+str(names)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+'data.frame':	12 obs. of  3 variables:
+ $ common_name: chr  "American Robin" "Hermit Thrush" "Eastern Bluebird" "Peregrin Falcon" ...
+ $ genus      : chr  "Turdus" "Catharus" "Sialia" "Falco" ...
+ $ species    : chr  "migratorius" "guttatus" "sialis" "peregrinus" ...
+```
+:::
+:::
+
+
+Notice that our new data has fewer rows (only 10) and several species that aren't found in the data we've been working with. We want the information from the "genus" and "species" columns, but not all of it. We only want scientific names for the species in the data set we're working with. 
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# The arguments left_join() must have are...
+  # 1. x = left hand data
+  # 2. y = right hand data
+  # 3. by = join_by(column to match and join by)
+
+# NOTE: All columns will be added from the new data frame. Are there any column naming conflicts?
+colnames(birds)
+colnames(names)
+```
+:::
+
+::: {.cell ref-label='joins2'}
+
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+# Let's rename the species column in the birds object to avoid importing a second column named species.
+# We can rename it "common_name" to match up with the same column in the names object.
+birds <- birds %>%
+  rename(common_name = species)
+
+# To make the join permanent, create a new object equal to an altered version of birds with <- 
+  # Pipe birds into the left_join function
+  # The pipe tells left_join() that x = birds
+  # supply y, in this case y = names
+  # join_by the column with the shared name
+  # pipe the joined data into unite() to combine the genus and species columns
+  # pipe into select() to rearrange the order of the columns.
+birds2 <- birds %>%
+  left_join(names, by = join_by(common_name)) %>%
+  unite(latin_name, c("genus", "species"), sep = " ") %>%
+  select(common_name, latin_name, family:mass_to_wing)
+```
+:::
+
+
+::: callout-note
+## <font size="5"> Note </font>
+
+<font size="4"> Because we created a new object above (`birds2`), if you're feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,
+
+`birds %>% left_join()`
+
+`birds %>% left_join() %>% unite()`
+
+`birds %>% left_join() %>% unite() %>% select()`
+
+</font>
+:::
+
 
 # **If/Else Statements**
 
