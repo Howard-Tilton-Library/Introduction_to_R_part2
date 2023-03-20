@@ -1,7 +1,7 @@
 ---
 title: "Intro to Coding in R, Part II: Management, Processing & Analysis"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "19 March 2023"
+date: "20 March 2023"
 
 format: 
   html:
@@ -1224,7 +1224,7 @@ It's main arguments are
 ::: callout-tip
 ## <font size="5"> Try it </font>
 
-<font size="4"> Use `if_else()` to fill new columns in `small_birds` with values based on conditions in another column. </font>
+<font size="4"> Use `if_else()` to fill new columns in `small_birds` with values based on conditions in another column. **Save these changes for use in the next section** </font>
 :::
 
 
@@ -1235,14 +1235,17 @@ It's main arguments are
 
 # Here's a straightforward case where we want to create a habitat column and assign the appropriate habitat type to each bird species. Crows and Robins live in the same habitat, and kestrels live in a different habitat, so there are only two possible conditions/choices: if and else.
 
+# Overwrite small birds with an altered version of itself using <-
 # Pipe small_birds into mutate()
 # Use mutate() to create a new column called habitat.
-# If species == "American Kestrel", then habitat == "Grasslands.
-# Otherwise, habitat == "Open Woodlands".
+# If species == "American Kestrel", then habitat == "grasslands.
+# Otherwise, habitat == "open woodlands".
 # Pipe output into relocate() to improve visibility of changes.
-small_birds %>%
-  mutate(habitat = if_else(species == "American Kestrel", "Grasslands", "Open Woodlands")) %>%
+small_birds <- small_birds %>%
+  mutate(habitat = if_else(species == "American Kestrel", "grasslands", "open woodlands")) %>%
   relocate(species, habitat)
+
+small_birds
 ```
 
 ::: {.cell-output-display}
@@ -1250,7 +1253,7 @@ small_birds %>%
 `````{=html}
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 `````
@@ -1259,10 +1262,10 @@ small_birds %>%
 
 ```{.r .cell-code}
 # Here's the same code but flipping the if and else to highlight how you can use %in% to match multiple values at once.
-# It says if the value in the species column is in this vector, then assign "Open Woodlands", otherwise assign "Grasslands"
+# It says if the value in the species column is in this vector, then assign "open woodlands", otherwise assign "grasslands"
 small_birds %>%
   mutate(habitat =
-           if_else(species %in% c("American Robin", "American Crow"), "Open Woodlands", "Grasslands")) %>%
+           if_else(species %in% c("American Robin", "American Crow"), "open woodlands", "grasslands")) %>%
   relocate(species, habitat)
 ```
 
@@ -1271,7 +1274,7 @@ small_birds %>%
 `````{=html}
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 `````
@@ -1298,14 +1301,17 @@ In practice, this works by setting our first "else" or "otherwise" value to a se
 ```{.r .cell-code}
 # Each of these three species has a different diet, so there is more than one "else" option. The pipeline is the same as above, but we replace our first "else" value with another if_else()
 
+# Save these changes with <-
 # If species == Kestrel, then diet == "Small Animals", 
 # otherwise if species == Crow, then diet == "Omnivore",
 # otherwise, diet == "Insects & berries".
-small_birds %>%
+small_birds <- small_birds %>%
   mutate(diet = 
-           if_else(species == "American Kestrel", "Small animals",
-                  ifelse(species == "American Crow", "Omnivore", "Insects & berries"))) %>%
-  relocate(species, diet)
+           if_else(species == "American Kestrel", "small animals",
+                  ifelse(species == "American Crow", "omnivore", "insects & berries"))) %>%
+  relocate(species, habitat, diet)
+
+small_birds
 ```
 
 ::: {.cell-output-display}
@@ -1313,7 +1319,7 @@ small_birds %>%
 `````{=html}
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 `````
@@ -1322,9 +1328,339 @@ small_birds %>%
 :::
 
 
-# **For Loops**
+# **Iteration**
+
+## Background
+
+**Iteration** in coding is the act of running multiple inputs through the same process in order to avoid duplication of code and effort (and thereby reducing bugs). It's a huge topic -- so huge, in fact, that it merits a guide of its own...more than we can cover here. Instead, we focus on two goals for this section: 
+
+1. Making sure you know iterative tools exist.
+2. Providing the briefest of introductions to those tools so you know which avenues to explore to learn more.
+
+There are three common ways to approach iteration in *R*, ordered below from oldest and most work-intensive to newest and least work-intensive.
+
+1. Loops in base *R* (for, while, and repeat)
+2. Functions that contain pre-packaged for loops
+    i) The `apply()` family in base *R*
+    ii) `tidyverse` functions like `across()` and `map()` from the `dplyr` and `purrr` packages respectively.
+
+**For Loops** are the most common of the original loops in base *R*. They can be a bit to wrap your head around and require a lot of typing, which means they provide more room for user error. They do, however, fulfill their job of processing multiple inputs at a time. For loops loop all the way through all your input data; the other loops only loop through your inputs while a certain condition is true, or they loop over and over again until they reach a defined condition.
+
+The **`apply()`** family in base *R* and the **`map()`** family from the `tidyverse` are very similar. They both save you from having to write loops, they take similar inputs and provide similar outputs, and there are multiple versions of each type. Though it tends to be a little more abstract because more happens behind the scenes, the `map()` family offers three main improvements over the `apply()` family:
+
+1. Naming conventions in the `map()` family are more intuitive.
+2. `map()` allows for more shortcuts (less typing).
+3. Since it's part of the tidyverse, the `map()` family can be worked into pipelines.
+
+Which of these tools you end up using may change on a case-by-case basis and tends to be a matter of personal preference. They all achieve the same end result, but it's important to know a bit about each to understand additional guidance you come across when delving deeper into your own analyses.
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Explore an example of duplication (bad) and learn how to fix it with each of the three types of iterative tools (good).</font>
+:::
+
+## Duplication
+
+First, the duplication. Notice that we've got inconsistent capitalization in the character class columns of `small_birds`. 
 
 
+::: {.cell}
+
+```{.r .cell-code}
+small_birds
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+
+If we wanted to clean that up for future publication, we could use `str_to_sentence()` from the `tidyverse` to capitalize only the first letter of each cell. We're only dealing with a handful of columns, so we could use the duplication approach and copy-paste it, changing column names:
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Look at all the duplication work here. It's a lot of copy-pasting, a lot of overwriting, and a lot of object names to change.
+# That's a lot of room for human error.
+
+# To start off, create a new object to edit called small_birds_dup (for duplication)
+# Then overwrite each column with an altered version of itself.
+small_birds_dup <- small_birds
+small_birds_dup$species <- str_to_sentence(small_birds_dup$species)
+small_birds_dup$habitat <- str_to_sentence(small_birds_dup$habitat)
+small_birds_dup$diet <- str_to_sentence(small_birds_dup$diet)
+small_birds_dup$family <- str_to_sentence(small_birds_dup$family)
+```
+:::
+
+
+Or we could duplicate effort with `mutate()`:
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# This approach somewhat reduces the amount of typing and overwriting we're doing, so there's a little bit less room for error.
+small_birds %>%
+  mutate(species = str_to_sentence(species)) %>%
+  mutate(habitat = str_to_sentence(habitat)) %>%
+  mutate(diet = str_to_sentence(diet)) %>%
+  mutate(family = str_to_sentence(family))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+## For Loops
+
+Using a for loop, we only have to call `str_to_sentence()` once...but there's more work required to put together the for loop itself. This would be less of a sacrifice if you were altering 10 or 20 columns at once, but it's good practice!
+
+A basic for loop consists of the following parts:
+
+1. Defined input parameters, meaning what objects the for loop will process and for how many iterations.
+2. An open curly bracket to contain the for loop.
+3. Any conditions you'd like to set for skipping objects or breaking/exiting the loop. (Omit if none).
+4. The actual instruction to skip (`next`) or exit (`break`) if needed.
+5. The process or function(s) you want to run
+6. A closed curly bracket to contain the for loop.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# The first thing we need to do is define a new object that we can edit. Let's call it small_birds_for
+small_birds_for <- small_birds
+
+# Next, you should familiarize yourself with a couple pieces of every for loop.
+
+# seq_along() will tell you the number of columns of your object and provide an index number for each one. e.g., there are 7 columns numbered 1:7
+seq_along(small_birds_for)
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+[1] 1 2 3 4 5 6 7
+```
+:::
+
+```{.r .cell-code}
+# double brackets after a data frame reference a column by its index number or order.
+# E.g., column 3 of small_birds_for is diet.
+small_birds_for[[3]]
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+[1] "small animals"     "small animals"     "omnivore"         
+[4] "omnivore"          "insects & berries" "insects & berries"
+```
+:::
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+# Now for the for loop itself.
+
+# Here's what it looks like altogether. I'll insert comments in a blown out version below.
+for (i in seq_along(small_birds_for)) {
+  if (is.numeric(small_birds_for[[i]])){
+    next
+    }
+  small_birds_for[[i]] <- str_to_sentence(small_birds_for[[i]])
+}
+
+for (i in seq_along(small_birds_for)) {
+# First line sets the for loop and input parameters (objects and number of iterations)
+  # i is a real number starting at 1 and increasing by 1 until it reaches the end value.
+  # You could replace it with (i in 1:10), for example, and it would climb from 1:10.
+  # Here it ends at 7 because small_birds_for has 7 columns.
+# End with an open curly bracket.
+
+  if (is.numeric(small_birds_for[[i]])){
+# The next row sets a condition. We can't capitalize numbers, so we want to prevent this loop from running on our columns containing numeric data, like mass_g.
+# This will check if a given column, identified by its index number, is numeric.
+  # Instructions for if() are contained in curly brackets also, so open one here.
+    
+    next
+# Provide instructions to if().
+  # Our instructions are simple: if the condition is met, then skip that column with "next"
+
+    }
+# Conditional instructions complete. Close if() with another curly bracket.
+
+  small_birds_for[[i]] <- str_to_sentence(small_birds_for[[i]])
+# Replace each column not skipped with an altered version of itself where 1st letter is capitalized.
+
+}
+# Close the curly brackets to denote the end of the for loop code.
+
+
+# Success? Call the object to check your work
+small_birds_for
+```
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+## `apply()` family
+
+This group of functions tackles iteration by applying other functions to your inputs, essentially running a for loop behind the scenes. Its a lot less work on your part, but it still has a number of components to wrap your head around. Variations include `apply()`, `lapply()`, `sapply()`, `vapply()` and more. They differ mostly in their accepted input and output types. Run `?lapply` in your Console for more info. 
+
+At their most basic, the only arguments these functions need are an input and a function. Sadly, none of the options return output as data frames by default, so you have to put the pieces back together with `as.data.frame()`. They also don't handle conditions very well, so if you don't want to process every column in a data frame, you'll have to create a function. For example...
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Here we use lapply which returns a list object (which can be a list of vectors, columns, data frames, other lists, etc.).
+# It will pull our data frame apart, so we wrap it in as.data.frame to convert the output from a list back into a data frame after the iteration.
+# We only want to edit character columns, so we need to create a function  using a different type of if else statement that says:
+  # "If x is a character, capitalize the first letter of every value, otherwise, return x (which should be numeric or anything but character class)
+# You can run this without as.data.frame() to examine the list output.
+as.data.frame(lapply(small_birds, function(x) {if(is.character(x)) str_to_sentence(x) else x }))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+## `map()` family and `across()`
+
+The most complicated parts of tackling iteration with the `purrr` package are figuring out which functions to use and what the shorthand means. A quick look in the help files or at the [cheat sheet](https://posit.co/resources/cheatsheets/?type=posit-cheatsheets&_page=2/) solves both questions. For example, there's `map()` for working with single lists, `map_if()` for working with lists and conditions, `map2()` for two lists, `pmap()` for many lists, `map_chr()` for character vector output, `map_dfc()` and `map_dfr()` for data frame output, `modify()` for same output type as input type, `modify_if()` for same output type as input type with conditions, and more. It's a huge list! We're going to use 'modify_if()' to process only character columns and return a data frame.
+
+As for the shorthand, it's all about reducing how much you need to type. You still need to provide input and a function, but you can use shortcuts for both of those, which are highlighted below.
+
+Look at how simple this is. It achieves the same thing as our big, complicated for loop:
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Pipe your input into modify_if
+# Supply your condition. If it's a function that yields TRUE/FALSE without needing any other arguments, just put the function name. Here, we use is.character.
+# Supply your function. If your function doesn't need any arguments, again, you just need the function name.
+small_birds %>%
+  modify_if(is.character, str_to_sentence)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+In more complicated cases where you may need arguments in your functions, you'll have to provide an input before the arguments, but you can use a simple `.` to stand in for your input rather than typing it all out. In these instances, you might also have to define your function. With `lapply()`, we did that with `function(x)`. You can use the same thing here or a number of other options shown below, all of which yield the same result.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# purrr package shorthand options shown from longest to fastest short cut to lay out their evolution. They all yield the same results.
+
+small_birds %>%
+  modify_if(is.character, function(x) str_to_sentence(x))
+
+small_birds %>%
+  modify_if(is.character, \(x) str_to_sentence(x))
+
+small_birds %>%
+  modify_if(is.character, \(.) str_to_sentence(.))
+
+small_birds %>%
+  modify_if(is.character, ~ str_to_sentence(.))
+# This last option is generally regarded as the preferred notation.
+```
+:::
+
+
+Lastly, there's one more option from the `tidyverse`'s `dplyr` package that you may come across. It's called `across()`. It uses the `purrr` shorthand to denote functions and inputs and can be paired with `mutate()` and a `where()` that sets the condition.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Basically, "mutate across all columns where the column is character class by applying the str_to_sentence() function."
+small_birds %>%
+  mutate(across(where(is.character), ~ str_to_sentence(.)))
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+
+## To learn more...
+
+::: callout-note
+## <font size="5"> Note </font>
+
+<font size="4"> To learn more about iterative tools, and *R* in general, see Dr. Hadley Wickham's excellent guide, [*R for Data Science*](https://r4ds.had.co.nz/index.html). Wickham is author of the `tidyverse` and the chief scientist behind *RStudio*! </font>
+:::
 
 # **T-Tests**
 

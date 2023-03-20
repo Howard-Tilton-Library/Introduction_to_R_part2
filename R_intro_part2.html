@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Mike Ellis (he/him/his)   PhD Candidate   Ecology &amp; Evolutionary Biology   Tulane University   mellis5@tulane.edu">
-<meta name="dcterms.date" content="2023-03-19">
+<meta name="dcterms.date" content="2023-03-20">
 
 <title>Intro to Coding in R, Part II: Management, Processing &amp; Analysis</title>
 <style>
@@ -3920,7 +3920,15 @@ window.onload = function() {
   </ul></li>
   <li><a href="#relational-joins" id="toc-relational-joins" class="nav-link" data-scroll-target="#relational-joins"><span class="toc-section-number">5</span>  <strong>Relational Joins</strong></a></li>
   <li><a href="#ifelse-statements" id="toc-ifelse-statements" class="nav-link" data-scroll-target="#ifelse-statements"><span class="toc-section-number">6</span>  <strong>If/Else Statements</strong></a></li>
-  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops"><span class="toc-section-number">7</span>  <strong>For Loops</strong></a></li>
+  <li><a href="#iteration" id="toc-iteration" class="nav-link" data-scroll-target="#iteration"><span class="toc-section-number">7</span>  <strong>Iteration</strong></a>
+  <ul class="collapse">
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#duplication" id="toc-duplication" class="nav-link" data-scroll-target="#duplication">Duplication</a></li>
+  <li><a href="#for-loops" id="toc-for-loops" class="nav-link" data-scroll-target="#for-loops">For Loops</a></li>
+  <li><a href="#apply-family" id="toc-apply-family" class="nav-link" data-scroll-target="#apply-family"><code>apply()</code> family</a></li>
+  <li><a href="#map-family-and-across" id="toc-map-family-and-across" class="nav-link" data-scroll-target="#map-family-and-across"><code>map()</code> family and <code>across()</code></a></li>
+  <li><a href="#to-learn-more" id="toc-to-learn-more" class="nav-link" data-scroll-target="#to-learn-more">To learn more…</a></li>
+  </ul></li>
   <li><a href="#t-tests" id="toc-t-tests" class="nav-link" data-scroll-target="#t-tests"><span class="toc-section-number">8</span>  <strong>T-Tests</strong></a></li>
   <li><a href="#figures-in-r" id="toc-figures-in-r" class="nav-link" data-scroll-target="#figures-in-r"><span class="toc-section-number">9</span>  <strong>Figures in R</strong></a></li>
   </ul>
@@ -3949,7 +3957,7 @@ window.onload = function() {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 19, 2023</p>
+      <p class="date">March 20, 2023</p>
     </div>
   </div>
   
@@ -5022,7 +5030,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><font size="4"> Use <code>if_else()</code> to fill new columns in <code>small_birds</code> with values based on conditions in another column. </font></p>
+<p><font size="4"> Use <code>if_else()</code> to fill new columns in <code>small_birds</code> with values based on conditions in another column. <strong>Save these changes for use in the next section</strong> </font></p>
 </div>
 </div>
 <div class="cell">
@@ -5030,33 +5038,36 @@ window.onload = function() {
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Here&#39;s a straightforward case where we want to create a habitat column and assign the appropriate habitat type to each bird species. Crows and Robins live in the same habitat, and kestrels live in a different habitat, so there are only two possible conditions/choices: if and else.</span></span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe small_birds into mutate()</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate() to create a new column called habitat.</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == &quot;American Kestrel&quot;, then habitat == &quot;Grasslands.</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Otherwise, habitat == &quot;Open Woodlands&quot;.</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe output into relocate() to improve visibility of changes.</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span> <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;Grasslands&quot;</span>, <span class="st">&quot;Open Woodlands&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Overwrite small birds with an altered version of itself using &lt;-</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe small_birds into mutate()</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate() to create a new column called habitat.</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == &quot;American Kestrel&quot;, then habitat == &quot;grasslands.</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Otherwise, habitat == &quot;open woodlands&quot;.</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe output into relocate() to improve visibility of changes.</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>small_birds <span class="ot">&lt;-</span> small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span> <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;grasslands&quot;</span>, <span class="st">&quot;open woodlands&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>small_birds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here&#39;s the same code but flipping the if and else to highlight how you can use %in% to match multiple values at once.</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It says if the value in the species column is in this vector, then assign &quot;Open Woodlands&quot;, otherwise assign &quot;Grasslands&quot;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It says if the value in the species column is in this vector, then assign &quot;open woodlands&quot;, otherwise assign &quot;grasslands&quot;</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;American Robin&quot;</span>, <span class="st">&quot;American Crow&quot;</span>), <span class="st">&quot;Open Woodlands&quot;</span>, <span class="st">&quot;Grasslands&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;American Robin&quot;</span>, <span class="st">&quot;American Crow&quot;</span>), <span class="st">&quot;open woodlands&quot;</span>, <span class="st">&quot;grasslands&quot;</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -5070,26 +5081,283 @@ window.onload = function() {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each of these three species has a different diet, so there is more than one &quot;else&quot; option. The pipeline is the same as above, but we replace our first &quot;else&quot; value with another if_else()</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == Kestrel, then diet == &quot;Small Animals&quot;, </span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise if species == Crow, then diet == &quot;Omnivore&quot;,</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise, diet == &quot;Insects &amp; berries&quot;.</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet =</span> </span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;Small animals&quot;</span>,</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">ifelse</span>(species <span class="sc">==</span> <span class="st">&quot;American Crow&quot;</span>, <span class="st">&quot;Omnivore&quot;</span>, <span class="st">&quot;Insects &amp; berries&quot;</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, diet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Save these changes with &lt;-</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == Kestrel, then diet == &quot;Small Animals&quot;, </span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise if species == Crow, then diet == &quot;Omnivore&quot;,</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise, diet == &quot;Insects &amp; berries&quot;.</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>small_birds <span class="ot">&lt;-</span> small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet =</span> </span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;small animals&quot;</span>,</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">ifelse</span>(species <span class="sc">==</span> <span class="st">&quot;American Crow&quot;</span>, <span class="st">&quot;omnivore&quot;</span>, <span class="st">&quot;insects &amp; berries&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat, diet)</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>small_birds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
   <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 </div>
 </section>
-<section id="for-loops" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> <strong>For Loops</strong></h1>
+<section id="iteration" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> <strong>Iteration</strong></h1>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p><strong>Iteration</strong> in coding is the act of running multiple inputs through the same process in order to avoid duplication of code and effort (and thereby reducing bugs). It’s a huge topic – so huge, in fact, that it merits a guide of its own…more than we can cover here. Instead, we focus on two goals for this section:</p>
+<ol type="1">
+<li>Making sure you know iterative tools exist.</li>
+<li>Providing the briefest of introductions to those tools so you know which avenues to explore to learn more.</li>
+</ol>
+<p>There are three common ways to approach iteration in <em>R</em>, ordered below from oldest and most work-intensive to newest and least work-intensive.</p>
+<ol type="1">
+<li>Loops in base <em>R</em> (for, while, and repeat)</li>
+<li>Functions that contain pre-packaged for loops
+<ol type="i">
+<li>The <code>apply()</code> family in base <em>R</em></li>
+<li><code>tidyverse</code> functions like <code>across()</code> and <code>map()</code> from the <code>dplyr</code> and <code>purrr</code> packages respectively.</li>
+</ol></li>
+</ol>
+<p><strong>For Loops</strong> are the most common of the original loops in base <em>R</em>. They can be a bit to wrap your head around and require a lot of typing, which means they provide more room for user error. They do, however, fulfill their job of processing multiple inputs at a time. For loops loop all the way through all your input data; the other loops only loop through your inputs while a certain condition is true, or they loop over and over again until they reach a defined condition.</p>
+<p>The <strong><code>apply()</code></strong> family in base <em>R</em> and the <strong><code>map()</code></strong> family from the <code>tidyverse</code> are very similar. They both save you from having to write loops, they take similar inputs and provide similar outputs, and there are multiple versions of each type. Though it tends to be a little more abstract because more happens behind the scenes, the <code>map()</code> family offers three main improvements over the <code>apply()</code> family:</p>
+<ol type="1">
+<li>Naming conventions in the <code>map()</code> family are more intuitive.</li>
+<li><code>map()</code> allows for more shortcuts (less typing).</li>
+<li>Since it’s part of the tidyverse, the <code>map()</code> family can be worked into pipelines.</li>
+</ol>
+<p>Which of these tools you end up using may change on a case-by-case basis and tends to be a matter of personal preference. They all achieve the same end result, but it’s important to know a bit about each to understand additional guidance you come across when delving deeper into your own analyses.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<font size="5"> Try it </font>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="4"> Explore an example of duplication (bad) and learn how to fix it with each of the three types of iterative tools (good).</font></p>
+</div>
+</div>
+</section>
+<section id="duplication" class="level2">
+<h2 class="anchored" data-anchor-id="duplication">Duplication</h2>
+<p>First, the duplication. Notice that we’ve got inconsistent capitalization in the character class columns of <code>small_birds</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>small_birds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"grasslands","3":"small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American Crow","2":"open woodlands","3":"omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American Robin","2":"open woodlands","3":"insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>If we wanted to clean that up for future publication, we could use <code>str_to_sentence()</code> from the <code>tidyverse</code> to capitalize only the first letter of each cell. We’re only dealing with a handful of columns, so we could use the duplication approach and copy-paste it, changing column names:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at all the duplication work here. It&#39;s a lot of copy-pasting, a lot of overwriting, and a lot of object names to change.</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># That&#39;s a lot of room for human error.</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># To start off, create a new object to edit called small_birds_dup (for duplication)</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Then overwrite each column with an altered version of itself.</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>small_birds_dup <span class="ot">&lt;-</span> small_birds</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>small_birds_dup<span class="sc">$</span>species <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_dup<span class="sc">$</span>species)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>small_birds_dup<span class="sc">$</span>habitat <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_dup<span class="sc">$</span>habitat)</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>small_birds_dup<span class="sc">$</span>diet <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_dup<span class="sc">$</span>diet)</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>small_birds_dup<span class="sc">$</span>family <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_dup<span class="sc">$</span>family)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or we could duplicate effort with <code>mutate()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This approach somewhat reduces the amount of typing and overwriting we&#39;re doing, so there&#39;s a little bit less room for error.</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species =</span> <span class="fu">str_to_sentence</span>(species)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span> <span class="fu">str_to_sentence</span>(habitat)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet =</span> <span class="fu">str_to_sentence</span>(diet)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">family =</span> <span class="fu">str_to_sentence</span>(family))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="for-loops" class="level2">
+<h2 class="anchored" data-anchor-id="for-loops">For Loops</h2>
+<p>Using a for loop, we only have to call <code>str_to_sentence()</code> once…but there’s more work required to put together the for loop itself. This would be less of a sacrifice if you were altering 10 or 20 columns at once, but it’s good practice!</p>
+<p>A basic for loop consists of the following parts:</p>
+<ol type="1">
+<li>Defined input parameters, meaning what objects the for loop will process and for how many iterations.</li>
+<li>An open curly bracket to contain the for loop.</li>
+<li>Any conditions you’d like to set for skipping objects or breaking/exiting the loop. (Omit if none).</li>
+<li>The actual instruction to skip (<code>next</code>) or exit (<code>break</code>) if needed.</li>
+<li>The process or function(s) you want to run</li>
+<li>A closed curly bracket to contain the for loop.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The first thing we need to do is define a new object that we can edit. Let&#39;s call it small_birds_for</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>small_birds_for <span class="ot">&lt;-</span> small_birds</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, you should familiarize yourself with a couple pieces of every for loop.</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># seq_along() will tell you the number of columns of your object and provide an index number for each one. e.g., there are 7 columns numbered 1:7</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">seq_along</span>(small_birds_for)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># double brackets after a data frame reference a column by its index number or order.</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># E.g., column 3 of small_birds_for is diet.</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>small_birds_for[[<span class="dv">3</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] &quot;small animals&quot;     &quot;small animals&quot;     &quot;omnivore&quot;         
+[4] &quot;omnivore&quot;          &quot;insects &amp; berries&quot; &quot;insects &amp; berries&quot;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now for the for loop itself.</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Here&#39;s what it looks like altogether. I&#39;ll insert comments in a blown out version below.</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(small_birds_for)) {</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.numeric</span>(small_birds_for[[i]])){</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  small_birds_for[[i]] <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_for[[i]])</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(small_birds_for)) {</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a><span class="co"># First line sets the for loop and input parameters (objects and number of iterations)</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># i is a real number starting at 1 and increasing by 1 until it reaches the end value.</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># You could replace it with (i in 1:10), for example, and it would climb from 1:10.</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Here it ends at 7 because small_birds_for has 7 columns.</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="co"># End with an open curly bracket.</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.numeric</span>(small_birds_for[[i]])){</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a><span class="co"># The next row sets a condition. We can&#39;t capitalize numbers, so we want to prevent this loop from running on our columns containing numeric data, like mass_g.</span></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a><span class="co"># This will check if a given column, identified by its index number, is numeric.</span></span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Instructions for if() are contained in curly brackets also, so open one here.</span></span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Provide instructions to if().</span></span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Our instructions are simple: if the condition is met, then skip that column with &quot;next&quot;</span></span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Conditional instructions complete. Close if() with another curly bracket.</span></span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>  small_birds_for[[i]] <span class="ot">&lt;-</span> <span class="fu">str_to_sentence</span>(small_birds_for[[i]])</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace each column not skipped with an altered version of itself where 1st letter is capitalized.</span></span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Close the curly brackets to denote the end of the for loop code.</span></span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Success? Call the object to check your work</span></span>
+<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a>small_birds_for</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="apply-family" class="level2">
+<h2 class="anchored" data-anchor-id="apply-family"><code>apply()</code> family</h2>
+<p>This group of functions tackles iteration by applying other functions to your inputs, essentially running a for loop behind the scenes. Its a lot less work on your part, but it still has a number of components to wrap your head around. Variations include <code>apply()</code>, <code>lapply()</code>, <code>sapply()</code>, <code>vapply()</code> and more. They differ mostly in their accepted input and output types. Run <code>?lapply</code> in your Console for more info.</p>
+<p>At their most basic, the only arguments these functions need are an input and a function. Sadly, none of the options return output as data frames by default, so you have to put the pieces back together with <code>as.data.frame()</code>. They also don’t handle conditions very well, so if you don’t want to process every column in a data frame, you’ll have to create a function. For example…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here we use lapply which returns a list object (which can be a list of vectors, columns, data frames, other lists, etc.).</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It will pull our data frame apart, so we wrap it in as.data.frame to convert the output from a list back into a data frame after the iteration.</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We only want to edit character columns, so we need to create a function  using a different type of if else statement that says:</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># &quot;If x is a character, capitalize the first letter of every value, otherwise, return x (which should be numeric or anything but character class)</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># You can run this without as.data.frame() to examine the list output.</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(small_birds, <span class="cf">function</span>(x) {<span class="cf">if</span>(<span class="fu">is.character</span>(x)) <span class="fu">str_to_sentence</span>(x) <span class="cf">else</span> x }))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="map-family-and-across" class="level2">
+<h2 class="anchored" data-anchor-id="map-family-and-across"><code>map()</code> family and <code>across()</code></h2>
+<p>The most complicated parts of tackling iteration with the <code>purrr</code> package are figuring out which functions to use and what the shorthand means. A quick look in the help files or at the <a href="https://posit.co/resources/cheatsheets/?type=posit-cheatsheets&amp;_page=2/">cheat sheet</a> solves both questions. For example, there’s <code>map()</code> for working with single lists, <code>map_if()</code> for working with lists and conditions, <code>map2()</code> for two lists, <code>pmap()</code> for many lists, <code>map_chr()</code> for character vector output, <code>map_dfc()</code> and <code>map_dfr()</code> for data frame output, <code>modify()</code> for same output type as input type, <code>modify_if()</code> for same output type as input type with conditions, and more. It’s a huge list! We’re going to use ‘modify_if()’ to process only character columns and return a data frame.</p>
+<p>As for the shorthand, it’s all about reducing how much you need to type. You still need to provide input and a function, but you can use shortcuts for both of those, which are highlighted below.</p>
+<p>Look at how simple this is. It achieves the same thing as our big, complicated for loop:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe your input into modify_if</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Supply your condition. If it&#39;s a function that yields TRUE/FALSE without needing any other arguments, just put the function name. Here, we use is.character.</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Supply your function. If your function doesn&#39;t need any arguments, again, you just need the function name.</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_if</span>(is.character, str_to_sentence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>In more complicated cases where you may need arguments in your functions, you’ll have to provide an input before the arguments, but you can use a simple <code>.</code> to stand in for your input rather than typing it all out. In these instances, you might also have to define your function. With <code>lapply()</code>, we did that with <code>function(x)</code>. You can use the same thing here or a number of other options shown below, all of which yield the same result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># purrr package shorthand options shown from longest to fastest short cut to lay out their evolution. They all yield the same results.</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_if</span>(is.character, <span class="cf">function</span>(x) <span class="fu">str_to_sentence</span>(x))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_if</span>(is.character, \(x) <span class="fu">str_to_sentence</span>(x))</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_if</span>(is.character, \(.) <span class="fu">str_to_sentence</span>(.))</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_if</span>(is.character, <span class="sc">~</span> <span class="fu">str_to_sentence</span>(.))</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a><span class="co"># This last option is generally regarded as the preferred notation.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lastly, there’s one more option from the <code>tidyverse</code>’s <code>dplyr</code> package that you may come across. It’s called <code>across()</code>. It uses the <code>purrr</code> shorthand to denote functions and inputs and can be paired with <code>mutate()</code> and a <code>where()</code> that sets the condition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basically, &quot;mutate across all columns where the column is character class by applying the str_to_sentence() function.&quot;</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span> <span class="fu">str_to_sentence</span>(.)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[3],"type":["chr"],"align":["left"]},{"label":["family"],"name":[4],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"175.3","6":"108.7","7":"0.62","_rn_":"1"},{"1":"American kestrel","2":"Grasslands","3":"Small animals","4":"Falconidae","5":"179.2","6":"111.2","7":"0.62","_rn_":"2"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"295.7","6":"455.7","7":"1.54","_rn_":"12"},{"1":"American crow","2":"Open woodlands","3":"Omnivore","4":"Corvidae","5":"279.7","6":"460.0","7":"1.64","_rn_":"13"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"120.8","6":"72.1","7":"0.60","_rn_":"22"},{"1":"American robin","2":"Open woodlands","3":"Insects & berries","4":"Turdidae","5":"135.4","6":"84.1","7":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="to-learn-more" class="level2">
+<h2 class="anchored" data-anchor-id="to-learn-more">To learn more…</h2>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<font size="5"> Note </font>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="4"> To learn more about iterative tools, and <em>R</em> in general, see Dr. Hadley Wickham’s excellent guide, <a href="https://r4ds.had.co.nz/index.html"><em>R for Data Science</em></a>. Wickham is author of the <code>tidyverse</code> and the chief scientist behind <em>RStudio</em>! </font></p>
+</div>
+</div>
+</section>
 </section>
 <section id="t-tests" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> <strong>T-Tests</strong></h1>
