@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Mike Ellis (he/him/his)   PhD Candidate   Ecology &amp; Evolutionary Biology   Tulane University   mellis5@tulane.edu">
-<meta name="dcterms.date" content="2023-03-18">
+<meta name="dcterms.date" content="2023-03-19">
 
 <title>Intro to Coding in R, Part II: Management, Processing &amp; Analysis</title>
 <style>
@@ -3949,7 +3949,7 @@ window.onload = function() {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 18, 2023</p>
+      <p class="date">March 19, 2023</p>
     </div>
   </div>
   
@@ -4007,7 +4007,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><font size="4"> This is more advanced, but if you’re active on GitHub or hope to be someday, then you’ll come to love R projects for smoothly translating to GitHub repositories and vice versa! </font></p>
+<p><font size="4"> This is more advanced, but if you’re active on GitHub or hope to be someday, then you’ll come to love R projects for how smoothly they integrate with GitHub repositories! </font></p>
 </div>
 </div>
 <ul>
@@ -4882,7 +4882,7 @@ window.onload = function() {
 </div>
 </div>
 </div>
-<p>If you weren’t paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you’d get something like this. You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue!</p>
+<p>If you weren’t paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you’d get something like this.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -4909,7 +4909,7 @@ window.onload = function() {
 </tr>
 </tbody>
 </table>
-<p>Relational joins solve this issue by defining a relationship between rows in multiple data frames, then adding in the appropriate data based on matching values, not order.</p>
+<p>You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches.</p>
 <p>There are several types of relational joins; we’ll use <code>left_join()</code>, which adds data from <em>y</em> into <em>x</em> as new columns. Since <em>x</em> comes before <em>y</em>, <em>x</em> is on the left and <em>y</em> is on the right. Imagine our original data is in your left hand and our new data in your right; <code>left_join()</code> takes information from your right hand and adds it to the data in your left hand.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -4928,16 +4928,17 @@ window.onload = function() {
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Relational Joins ----</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Goal: Make a single column for scientific names by</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Matching common names and joining genus and species names from a second data set.</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Uniting the species names genus and species columns into a single column.</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># First, download the new data to your project directory. Remove the sub-folder if you don&#39;t have one, or edit it if it&#39;s different from mine.</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="at">url =</span> <span class="st">&quot;https://libguides.tulane.edu/ld.php?content_id=71057889&quot;</span>, <span class="at">destfile =</span> <span class="st">&quot;Data_In/intro2_bird_names.csv&quot;</span>)</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, import and examine the data</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data_In/intro2_bird_names.csv&quot;</span>)</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Downloading and importing a new data frame.</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Matching common names and adding in genus and species columns from the second data set.</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Uniting the genus and species columns into a single column.</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># First, download the new data to your project directory. Remove the sub-folder if you don&#39;t have one, or edit it if it&#39;s different from mine.</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="at">url =</span> <span class="st">&quot;https://libguides.tulane.edu/ld.php?content_id=71057889&quot;</span>, <span class="at">destfile =</span> <span class="st">&quot;Data_In/intro2_bird_names.csv&quot;</span>)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Next, import and examine the data</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data_In/intro2_bird_names.csv&quot;</span>)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&#39;data.frame&#39;:   12 obs. of  3 variables:
  $ common_name: chr  &quot;American Robin&quot; &quot;Hermit Thrush&quot; &quot;Eastern Bluebird&quot; &quot;Peregrin Falcon&quot; ...
@@ -4945,16 +4946,18 @@ window.onload = function() {
  $ species    : chr  &quot;migratorius&quot; &quot;guttatus&quot; &quot;sialis&quot; &quot;peregrinus&quot; ...</code></pre>
 </div>
 </div>
-<p>Notice that our new data has fewer rows (only 10) and several species that aren’t found in the data we’ve been working with. We want the information from the “genus” and “species” columns, but not all of it. We only want scientific names for the species in the data set we’re working with.</p>
+<p>Notice that our new data frame has fewer rows (only 10) and several species that aren’t found in the data we’ve been working with. We want the information from the “genus” and “species” columns, but not all of it. We only want scientific names for the species in the data set we’re working with. <code>left_join()</code> will bring in what matches and leave behind what doesn’t.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The arguments left_join() must have are...</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. x = left hand data</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. y = right hand data</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. by = join_by(column to match and join by)</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: All columns will be added from the new data frame. Are there any column naming conflicts?</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(birds)</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. y = right hand data to add in</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. by = join_by(columns containing values to match by)</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If matching columns have the same name, use that in join_by().</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If they don&#39;t, use join_by(left_column = right_column)</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: All columns will be added from the new data frame unless otherwise specified. Are there any column naming conflicts?</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(birds)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-ref-label="joins2">
 
@@ -4968,14 +4971,14 @@ window.onload = function() {
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co"># To make the join permanent, create a new object equal to an altered version of birds with &lt;- </span></span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pipe birds into the left_join function</span></span>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The pipe tells left_join() that x = birds</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># supply y, in this case y = names</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># supply y, in this case y = names object</span></span>
 <span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># join_by the column with the shared name</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pipe the joined data into unite() to combine the genus and species columns</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pipe into select() to rearrange the order of the columns.</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>birds2 <span class="ot">&lt;-</span> birds <span class="sc">%&gt;%</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pipe the newly joined data into unite() to combine the genus and species columns</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pipe into relocate() to rearrange the order of the columns.</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>birds_latin <span class="ot">&lt;-</span> birds <span class="sc">%&gt;%</span></span>
 <span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(names, <span class="at">by =</span> <span class="fu">join_by</span>(common_name)) <span class="sc">%&gt;%</span></span>
 <span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(latin_name, <span class="fu">c</span>(<span class="st">&quot;genus&quot;</span>, <span class="st">&quot;species&quot;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(common_name, latin_name, family<span class="sc">:</span>mass_to_wing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(common_name, latin_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -4987,7 +4990,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><font size="4"> Because we created a new object above (<code>birds2</code>), if you’re feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,</font></p><font size="4">
+<p><font size="4"> Because we created a new object above (<code>birds_latin</code>), if you’re feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,</font></p><font size="4">
 <p><code>birds %&gt;% left_join()</code></p>
 <p><code>birds %&gt;% left_join() %&gt;% unite()</code></p>
 <p><code>birds %&gt;% left_join() %&gt;% unite() %&gt;% select()</code></p>
@@ -4997,6 +5000,93 @@ window.onload = function() {
 </section>
 <section id="ifelse-statements" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> <strong>If/Else Statements</strong></h1>
+<p>Often we find ourselves in a situation where we need to create a new column, or edit an existing column, to contain information that is based on values in another column. <code>if_else()</code> is a handy tool for doing just that.</p>
+<p>It tells <em>R</em>,</p>
+<blockquote class="blockquote">
+<p><em>if x meets my condition, then assign value y, otherwise (aka else), assign value z.</em></p>
+</blockquote>
+<p>It’s main arguments are</p>
+<ol type="1">
+<li>Input data</li>
+<li>Condition (<code>==</code>, <code>!=</code>, <code>&lt;/&gt;</code>, <code>&lt;=/&gt;=</code>, <code>%in%</code>, etc.)</li>
+<li>Value to assign if condition = TRUE</li>
+<li>Value to assign if condition = FALSE</li>
+</ol>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+<font size="5"> Try it </font>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><font size="4"> Use <code>if_else()</code> to fill new columns in <code>small_birds</code> with values based on conditions in another column. </font></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># If_else ----</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Here&#39;s a straightforward case where we want to create a habitat column and assign the appropriate habitat type to each bird species. Crows and Robins live in the same habitat, and kestrels live in a different habitat, so there are only two possible conditions/choices: if and else.</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe small_birds into mutate()</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use mutate() to create a new column called habitat.</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == &quot;American Kestrel&quot;, then habitat == &quot;Grasslands.</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Otherwise, habitat == &quot;Open Woodlands&quot;.</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Pipe output into relocate() to improve visibility of changes.</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span> <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;Grasslands&quot;</span>, <span class="st">&quot;Open Woodlands&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Here&#39;s the same code but flipping the if and else to highlight how you can use %in% to match multiple values at once.</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># It says if the value in the species column is in this vector, then assign &quot;Open Woodlands&quot;, otherwise assign &quot;Grasslands&quot;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitat =</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;American Robin&quot;</span>, <span class="st">&quot;American Crow&quot;</span>), <span class="st">&quot;Open Woodlands&quot;</span>, <span class="st">&quot;Grasslands&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, habitat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>What do you do if you have more than two possible conditions or outcomes, i.e., you have an “if” and multiple “elses”? One way to deal with that is by using nested <code>if_else()</code> statements.</p>
+<p>In essence…</p>
+<blockquote class="blockquote">
+<p><em>1. If x meets my first condition, <br> 2. then assign value y. <br> 3. Otherwise, if x meets my second condition, <br> 4. then assign value z. <br> 5. Otherwise x meets neither condition 1 nor 2, so assign value a.</em></p>
+</blockquote>
+<p>In practice, this works by setting our first “else” or “otherwise” value to a second <code>if_else()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each of these three species has a different diet, so there is more than one &quot;else&quot; option. The pipeline is the same as above, but we replace our first &quot;else&quot; value with another if_else()</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If species == Kestrel, then diet == &quot;Small Animals&quot;, </span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise if species == Crow, then diet == &quot;Omnivore&quot;,</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise, diet == &quot;Insects &amp; berries&quot;.</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>small_birds <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diet =</span> </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(species <span class="sc">==</span> <span class="st">&quot;American Kestrel&quot;</span>, <span class="st">&quot;Small animals&quot;</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">ifelse</span>(species <span class="sc">==</span> <span class="st">&quot;American Crow&quot;</span>, <span class="st">&quot;Omnivore&quot;</span>, <span class="st">&quot;Insects &amp; berries&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(species, diet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
 </section>
 <section id="for-loops" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> <strong>For Loops</strong></h1>

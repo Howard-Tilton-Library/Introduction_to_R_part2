@@ -1,7 +1,7 @@
 ---
 title: "Intro to Coding in R, Part II: Management, Processing & Analysis"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "18 March 2023"
+date: "19 March 2023"
 
 format: 
   html:
@@ -61,7 +61,7 @@ Happy coding!
 ::: callout-note
 ## <font size="5"> Note </font>
 
-<font size="4"> This is more advanced, but if you're active on GitHub or hope to be someday, then you'll come to love R projects for smoothly translating to GitHub repositories and vice versa! </font>
+<font size="4"> This is more advanced, but if you're active on GitHub or hope to be someday, then you'll come to love R projects for how smoothly they integrate with GitHub repositories! </font>
 :::
 
 -   Choose "New Directory" and then "New Project" to create a folder/project somewhere that makes sense for you. Give it a meaningful but short name like "Intro_to_R\_part2". Don't check any of the optional boxes for now.
@@ -1096,7 +1096,7 @@ Folks often work with more than one data set, and sometimes you'll need to combi
 Medication Trials
 :::
 
-If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this. You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue!
+If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this. 
 
 | Patient   | Medication | Reaction    |
 |-----------|------------|-------------|
@@ -1104,7 +1104,7 @@ If you weren't paying attention to the order of patients in each column, and jus
 | Patient 2 | Meds Y     | Recovered   |
 | Patient 3 | Meds Z     | Recovered   |
 
-Relational joins solve this issue by defining a relationship between rows in multiple data frames, then adding in the appropriate data based on matching values, not order. 
+You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches. 
 
 There are several types of relational joins; we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left hand.
 
@@ -1121,8 +1121,9 @@ There are several types of relational joins; we'll use `left_join()`, which adds
 # Relational Joins ----
 
 # Goal: Make a single column for scientific names by
-  # 1. Matching common names and joining genus and species names from a second data set.
-  # 2. Uniting the species names genus and species columns into a single column.
+  # 1. Downloading and importing a new data frame.
+  # 2. Matching common names and adding in genus and species columns from the second data set.
+  # 3. Uniting the genus and species columns into a single column.
 
 # First, download the new data to your project directory. Remove the sub-folder if you don't have one, or edit it if it's different from mine.
 download.file(url = "https://libguides.tulane.edu/ld.php?content_id=71057889", destfile = "Data_In/intro2_bird_names.csv")
@@ -1144,7 +1145,7 @@ str(names)
 :::
 
 
-Notice that our new data has fewer rows (only 10) and several species that aren't found in the data we've been working with. We want the information from the "genus" and "species" columns, but not all of it. We only want scientific names for the species in the data set we're working with. 
+Notice that our new data frame has fewer rows (only 10) and several species that aren't found in the data we've been working with. We want the information from the "genus" and "species" columns, but not all of it. We only want scientific names for the species in the data set we're working with. `left_join()` will bring in what matches and leave behind what doesn't.
 
 
 ::: {.cell}
@@ -1152,10 +1153,12 @@ Notice that our new data has fewer rows (only 10) and several species that aren'
 ```{.r .cell-code}
 # The arguments left_join() must have are...
   # 1. x = left hand data
-  # 2. y = right hand data
-  # 3. by = join_by(column to match and join by)
+  # 2. y = right hand data to add in
+  # 3. by = join_by(columns containing values to match by)
+    # If matching columns have the same name, use that in join_by().
+    # If they don't, use join_by(left_column = right_column)
 
-# NOTE: All columns will be added from the new data frame. Are there any column naming conflicts?
+# NOTE: All columns will be added from the new data frame unless otherwise specified. Are there any column naming conflicts?
 colnames(birds)
 colnames(names)
 ```
@@ -1176,14 +1179,14 @@ birds <- birds %>%
 # To make the join permanent, create a new object equal to an altered version of birds with <- 
   # Pipe birds into the left_join function
   # The pipe tells left_join() that x = birds
-  # supply y, in this case y = names
+  # supply y, in this case y = names object
   # join_by the column with the shared name
-  # pipe the joined data into unite() to combine the genus and species columns
-  # pipe into select() to rearrange the order of the columns.
-birds2 <- birds %>%
+  # pipe the newly joined data into unite() to combine the genus and species columns
+  # pipe into relocate() to rearrange the order of the columns.
+birds_latin <- birds %>%
   left_join(names, by = join_by(common_name)) %>%
   unite(latin_name, c("genus", "species"), sep = " ") %>%
-  select(common_name, latin_name, family:mass_to_wing)
+  relocate(common_name, latin_name)
 ```
 :::
 
@@ -1191,7 +1194,7 @@ birds2 <- birds %>%
 ::: callout-note
 ## <font size="5"> Note </font>
 
-<font size="4"> Because we created a new object above (`birds2`), if you're feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,
+<font size="4"> Because we created a new object above (`birds_latin`), if you're feeling fuzzy about any of the steps in the pipeline, you can examine output at each stage by running the original data through the pipeline in pieces, then adding one additional segment of the pipe at a time! E.g.,
 
 `birds %>% left_join()`
 
@@ -1205,7 +1208,123 @@ birds2 <- birds %>%
 
 # **If/Else Statements**
 
+Often we find ourselves in a situation where we need to create a new column, or edit an existing column, to contain information that is based on values in another column. `if_else()` is a handy tool for doing just that. 
+
+It tells *R*,
+
+>*if x meets my condition, then assign value y, otherwise (aka else), assign value z.*
+
+It's main arguments are 
+
+1. Input data
+2. Condition (`==`, `!=`, `</>`, `<=/>=`, `%in%`, etc.)
+3. Value to assign if condition = TRUE
+4. Value to assign if condition = FALSE
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Use `if_else()` to fill new columns in `small_birds` with values based on conditions in another column. </font>
+:::
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# If_else ----
+
+# Here's a straightforward case where we want to create a habitat column and assign the appropriate habitat type to each bird species. Crows and Robins live in the same habitat, and kestrels live in a different habitat, so there are only two possible conditions/choices: if and else.
+
+# Pipe small_birds into mutate()
+# Use mutate() to create a new column called habitat.
+# If species == "American Kestrel", then habitat == "Grasslands.
+# Otherwise, habitat == "Open Woodlands".
+# Pipe output into relocate() to improve visibility of changes.
+small_birds %>%
+  mutate(habitat = if_else(species == "American Kestrel", "Grasslands", "Open Woodlands")) %>%
+  relocate(species, habitat)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+
+```{.r .cell-code}
+# Here's the same code but flipping the if and else to highlight how you can use %in% to match multiple values at once.
+# It says if the value in the species column is in this vector, then assign "Open Woodlands", otherwise assign "Grasslands"
+small_birds %>%
+  mutate(habitat =
+           if_else(species %in% c("American Robin", "American Crow"), "Open Woodlands", "Grasslands")) %>%
+  relocate(species, habitat)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["habitat"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Grasslands","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Open Woodlands","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Open Woodlands","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
+What do you do if you have more than two possible conditions or outcomes, i.e., you have an "if" and multiple "elses"? One way to deal with that is by using nested `if_else()` statements. 
+
+In essence...
+
+> *1. If x meets my first condition,  <br>
+2. then assign value y. <br>
+3. Otherwise, if x meets my second condition, <br>
+4. then assign value z. <br>
+5. Otherwise x meets neither condition 1 nor 2, so assign value a.*
+
+In practice, this works by setting our first "else" or "otherwise" value to a second `if_else()`.
+
+
+::: {.cell}
+
+```{.r .cell-code}
+# Each of these three species has a different diet, so there is more than one "else" option. The pipeline is the same as above, but we replace our first "else" value with another if_else()
+
+# If species == Kestrel, then diet == "Small Animals", 
+# otherwise if species == Crow, then diet == "Omnivore",
+# otherwise, diet == "Insects & berries".
+small_birds %>%
+  mutate(diet = 
+           if_else(species == "American Kestrel", "Small animals",
+                  ifelse(species == "American Crow", "Omnivore", "Insects & berries"))) %>%
+  relocate(species, diet)
+```
+
+::: {.cell-output-display}
+
+`````{=html}
+<div data-pagedtable="false">
+  <script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["species"],"name":[1],"type":["chr"],"align":["left"]},{"label":["diet"],"name":[2],"type":["chr"],"align":["left"]},{"label":["family"],"name":[3],"type":["chr"],"align":["left"]},{"label":["wing_length_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mass_g"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["mass_to_wing"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"175.3","5":"108.7","6":"0.62","_rn_":"1"},{"1":"American Kestrel","2":"Small animals","3":"Falconidae","4":"179.2","5":"111.2","6":"0.62","_rn_":"2"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"295.7","5":"455.7","6":"1.54","_rn_":"12"},{"1":"American Crow","2":"Omnivore","3":"Corvidae","4":"279.7","5":"460.0","6":"1.64","_rn_":"13"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"120.8","5":"72.1","6":"0.60","_rn_":"22"},{"1":"American Robin","2":"Insects & berries","3":"Turdidae","4":"135.4","5":"84.1","6":"0.62","_rn_":"23"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+`````
+
+:::
+:::
+
+
 # **For Loops**
+
+
 
 # **T-Tests**
 
