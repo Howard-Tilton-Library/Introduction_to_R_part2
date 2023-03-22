@@ -1,6 +1,6 @@
 # Intro to R: Part II
 
-![](Data_In/Figures/TUL_Logos_narrow.png){fig-align="center"}
+![](Data_In/Figures/TUL_Logos_narrow.png)
 
 Welcome! This tutorial was commissioned by Tulane University's Howard-Tilton Memorial Library as the second half of an Intro to *R* workshop. It is targeted towards faculty, post-docs, graduate students, and undergraduates new to *R*. It's goal is to teach you the basic *R* coding skills you're likely to need for every coding endeavor.
 
