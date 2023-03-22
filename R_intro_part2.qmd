@@ -623,8 +623,7 @@ birds %>%
 
 Folks often work with more than one data set, and sometimes you'll need to combine information into a single data frame. But you usually want to combine based on a relationship between the two. Imagine you have the following data sets:
 
-::: {#tbl-panel layout-ncol=2}
-
+::: {#tbl-panel layout-ncol="2"}
 | Patient   | Medication |
 |-----------|------------|
 | Patient 1 | Meds X     |
@@ -633,26 +632,26 @@ Folks often work with more than one data set, and sometimes you'll need to combi
 
 : Medication Treatment {#tbl-first}
 
-| Patient       | Reaction  |
-|---------------|-----------|
-| *Patient 3*   | *Died*    |
-| Patient 2     | Recovered |
-| Patient 1     | Recovered |
+| Patient     | Reaction  |
+|-------------|-----------|
+| *Patient 3* | *Died*    |
+| Patient 2   | Recovered |
+| Patient 1   | Recovered |
 
 : Medication Response {#tbl-second}
 
 Medication Trials
 :::
 
-If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this. 
+If you weren't paying attention to the order of patients in each column, and just pasted the Reaction Column from the 2nd table onto the first, you'd get something like this.
 
-| Patient   | Medication | Reaction    |
-|-----------|------------|-------------|
-| Patient 1 | Meds X     | *Died*      |
-| Patient 2 | Meds Y     | Recovered   |
-| Patient 3 | Meds Z     | Recovered   |
+| Patient   | Medication | Reaction  |
+|-----------|------------|-----------|
+| Patient 1 | Meds X     | *Died*    |
+| Patient 2 | Meds Y     | Recovered |
+| Patient 3 | Meds Z     | Recovered |
 
-You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches. 
+You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches.
 
 There are several types of relational joins; we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left hand.
 
@@ -741,21 +740,20 @@ birds_latin <- birds %>%
 </font>
 :::
 
-
 # **If/Else Statements**
 
-Often we find ourselves in a situation where we need to create a new column, or edit an existing column, to contain information that is based on values in another column. `if_else()` is a handy tool for doing just that. 
+Often we find ourselves in a situation where we need to create a new column, or edit an existing column, to contain information that is based on values in another column. `if_else()` is a handy tool for doing just that.
 
 It tells *R*,
 
->*if x meets my condition, then assign value y, otherwise (aka else), assign value z.*
+> *if x meets my condition, then assign value y, otherwise (aka else), assign value z.*
 
-It's main arguments are 
+It's main arguments are
 
-1. Input data
-2. Condition (`==`, `!=`, `</>`, `<=/>=`, `%in%`, etc.)
-3. Value to assign if condition = TRUE
-4. Value to assign if condition = FALSE
+1.  Input data
+2.  Condition (`==`, `!=`, `</>`, `<=/>=`, `%in%`, etc.)
+3.  Value to assign if condition = TRUE
+4.  Value to assign if condition = FALSE
 
 ::: callout-tip
 ## <font size="5"> Try it </font>
@@ -790,15 +788,11 @@ small_birds %>%
   relocate(species, habitat)
 ```
 
-What do you do if you have more than two possible conditions or outcomes, i.e., you have an "if" and multiple "elses"? One way to deal with that is by using nested `if_else()` statements. 
+What do you do if you have more than two possible conditions or outcomes, i.e., you have an "if" and multiple "elses"? One way to deal with that is by using nested `if_else()` statements.
 
 In essence...
 
-> *1. If x meets my first condition,  <br>
-2. then assign value y. <br>
-3. Otherwise, if x meets my second condition, <br>
-4. then assign value z. <br>
-5. Otherwise x meets neither condition 1 nor 2, so assign value a.*
+> *1. If x meets my first condition,* <br> 2. then assign value y. <br> 3. Otherwise, if x meets my second condition, <br> 4. then assign value z. <br> 5. Otherwise x meets neither condition 1 nor 2, so assign value a.
 
 In practice, this works by setting our first "else" or "otherwise" value to a second `if_else()`.
 
@@ -824,25 +818,25 @@ small_birds
 
 ## Background
 
-**Iteration** in coding is the act of running multiple inputs through the same process in order to avoid duplication of code and effort (and thereby reducing bugs). It's a huge topic -- so huge, in fact, that it merits a guide of its own...more than we can cover here. Instead, we focus on two goals for this section: 
+**Iteration** in coding is the act of running multiple inputs through the same process in order to avoid duplication of code and effort (and thereby reducing bugs). It's a huge topic -- so huge, in fact, that it merits a guide of its own...more than we can cover here. Instead, we focus on two goals for this section:
 
-1. Making sure you know iterative tools exist.
-2. Providing the briefest of introductions to those tools so you know which avenues to explore to learn more.
+1.  Making sure you know iterative tools exist.
+2.  Providing the briefest of introductions to those tools so you know which avenues to explore to learn more.
 
 There are three common ways to approach iteration in *R*, ordered below from oldest and most work-intensive to newest and least work-intensive.
 
-1. Loops in base *R* (for, while, and repeat)
-2. Functions that contain pre-packaged for loops
-    i) The `apply()` family in base *R*
+1.  Loops in base *R* (for, while, and repeat)
+2.  Functions that contain pre-packaged for loops
+    i)  The `apply()` family in base *R*
     ii) `tidyverse` functions like `across()` and `map()` from the `dplyr` and `purrr` packages respectively.
 
 **For Loops** are the most common of the original loops in base *R*. They can be a bit to wrap your head around and require a lot of typing, which means they provide more room for user error. They do, however, fulfill their job of processing multiple inputs at a time. For loops loop all the way through all your input data; the other loops only loop through your inputs while a certain condition is true, or they loop over and over again until they reach a defined condition.
 
 The **`apply()`** family in base *R* and the **`map()`** family from the `tidyverse` are very similar. They both save you from having to write loops, they take similar inputs and provide similar outputs, and there are multiple versions of each type. Though it tends to be a little more abstract because more happens behind the scenes, the `map()` family offers three main improvements over the `apply()` family:
 
-1. Naming conventions in the `map()` family are more intuitive.
-2. `map()` allows for more shortcuts (less typing).
-3. Since it's part of the tidyverse, the `map()` family can be worked into pipelines.
+1.  Naming conventions in the `map()` family are more intuitive.
+2.  `map()` allows for more shortcuts (less typing).
+3.  Since it's part of the tidyverse, the `map()` family can be worked into pipelines.
 
 Which of these tools you end up using may change on a case-by-case basis and tends to be a matter of personal preference. They all achieve the same end result, but it's important to know a bit about each to understand additional guidance you come across when delving deeper into your own analyses.
 
@@ -854,7 +848,7 @@ Which of these tools you end up using may change on a case-by-case basis and ten
 
 ## Duplication
 
-First, the duplication. Notice that we've got inconsistent capitalization in the character class columns of `small_birds`. 
+First, the duplication. Notice that we've got inconsistent capitalization in the character class columns of `small_birds`.
 
 ```{r}
 #| label: duplication1
@@ -862,7 +856,6 @@ First, the duplication. Notice that we've got inconsistent capitalization in the
 small_birds
 
 ```
-
 
 If we wanted to clean that up for future publication, we could use `str_to_sentence()` from the `tidyverse` to capitalize only the first letter of each cell. We're only dealing with a handful of columns, so we could use the duplication approach and copy-paste it, changing column names:
 
@@ -901,12 +894,12 @@ Using a for loop, we only have to call `str_to_sentence()` once...but there's mo
 
 A basic for loop consists of the following parts:
 
-1. Defined input parameters, meaning what objects the for loop will process and for how many iterations.
-2. An open curly bracket to contain the for loop.
-3. Any conditions you'd like to set for skipping objects or breaking/exiting the loop. (Omit if none).
-4. The actual instruction to skip (`next`) or exit (`break`) if needed.
-5. The process or function(s) you want to run
-6. A closed curly bracket to contain the for loop.
+1.  Defined input parameters, meaning what objects the for loop will process and for how many iterations.
+2.  An open curly bracket to contain the for loop.
+3.  Any conditions you'd like to set for skipping objects or breaking/exiting the loop. (Omit if none).
+4.  The actual instruction to skip (`next`) or exit (`break`) if needed.
+5.  The process or function(s) you want to run
+6.  A closed curly bracket to contain the for loop.
 
 ```{r}
 #| label: seq-along
@@ -984,7 +977,7 @@ small_birds_for
 
 ## `apply()` family
 
-This group of functions tackles iteration by applying other functions to your inputs, essentially running a for loop behind the scenes. Its a lot less work on your part, but it still has a number of components to wrap your head around. Variations include `apply()`, `lapply()`, `sapply()`, `vapply()` and more. They differ mostly in their accepted input and output types. Run `?lapply` in your Console for more info. 
+This group of functions tackles iteration by applying other functions to your inputs, essentially running a for loop behind the scenes. Its a lot less work on your part, but it still has a number of components to wrap your head around. Variations include `apply()`, `lapply()`, `sapply()`, `vapply()` and more. They differ mostly in their accepted input and output types. Run `?lapply` in your Console for more info.
 
 At their most basic, the only arguments these functions need are an input and a function. Sadly, none of the options return output as data frames by default, so you have to put the pieces back together with `as.data.frame()`. They also don't handle conditions very well, so if you don't want to process every column in a data frame, you'll have to create a function. For example...
 
@@ -1052,7 +1045,6 @@ small_birds %>%
 
 ```
 
-
 ## To learn more...
 
 ::: callout-note
@@ -1061,12 +1053,311 @@ small_birds %>%
 <font size="4"> To learn more about iterative tools, and *R* in general, see Dr. Hadley Wickham's excellent guide, [*R for Data Science*](https://r4ds.had.co.nz/index.html). Wickham is author of the `tidyverse` and the chief scientist behind *RStudio*! </font>
 :::
 
-# **T-Tests**
+# **Analyses (but not really)**
 
-# **Figures in R**
+*R* can run basically any analysis you can think of, and someone, somewhere, has probably already bundled up that analysis into a neat little function. (But if not, you can write your own function!) Since the field of statistics is immense and every project calls for an individualized approach, we won't dive too deeply into analyses here. This guide is about teaching you the coding basics that you'll need on *every* project, not unique projects.
 
--   r-graphs-gallery
--   ggplot
--   Alternative to boxplots
--   Bar chart
--   Saving/Exporting
+Just know that your there's a package out there for you, probably even several. For example, there are stand-alone packages for generalized linear mixed models, for checking model assumptions, for machine learning, Bayesian statistics, for entire fields, like package `vegan` for community ecologists, and on and on and on.
+
+...And then there's this:
+`library(help = "stats")`
+
+Base *R* ships with a huge number of statistical functions to run in the `stats` package. It covers the basics like Chi-squared tests, t-tests, ANOVAs, linear models, rank-sum, heatmaps and so on. A lot of them are quick and easy once you've got your data cleaned. Here's a super fast example of a t-test -- so fast it only takes 3 lines of code:
+
+**Are Kestrels significantly heavier on average than Robins?**
+
+```{r}
+#| label: t-test
+
+
+# Filter out kestrels
+kestrel <- filter(birds, common_name == "American Kestrel")
+
+# Filter out robins
+robin <- filter(birds, common_name == "American Robin")
+
+# t-test on their mass columns
+t.test(kestrel$mass_g, robin$mass_g)
+```
+
+**They sure are!**
+
+# **Producing Figures in R**
+
+Like analyses, plots in *R* are really only limited by your imagination...and how well you handle making lots of minute tweaks over and over again until you get a result that makes you happy. The trickiest thing about them is that they have lots of component parts to fiddle with -- more than most people will ever learn. The nice thing is that you don't have to learn all the ins and outs of plotting in R, just how to use your resources:
+
+-   [`ggplot2` Data Visualization Cheatsheet from Posit/RStudio](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf)
+-   [*R for Data Science*](https://r4ds.had.co.nz/index.html) contains a whole chapter on how to use `ggplot2` written by the package's lead author.
+-   If you like that chapter, you'll be happy to learn they followed it up with a whole book: [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/).
+-   [The R Graph Gallery](https://r-graph-gallery.com/index.html) provides a huge number of example plots of various types and provides the code for how to make them. All you have to do is adapt the code to your own data.
+-   [Stackoverflow.com](https://stackoverflow.com) for all your coding questions.
+
+The links I provide above are all for making plots in `ggplot2`, part of the `tidyverse`. While you can make plots in base *R*, it tends to be a headache-inducing experience. Your options are limited, aesthetics aren't great, different plots use different language, and things often don't work as expected. The end result is that most folks prefer plotting in `ggplot2`, and it's a good place to start learning.
+
+Again, we won't delve too deeply into the specifics because the possibilities are endless, but below are a few quick examples using our bird data.
+
+All figures made in `ggplot2` use the same grammar structure:
+
+-   First, always start the plot with `ggplot()` and supply it with some data. Then add (+) from there.
+-   Aesthetics, `aes()`, are provided either in `ggplot()` or in the geometry. They tell the plot which data to put on which axis and how to define groups.
+-   Geometry tells `ggplot()` which type of plot to make, e.g., `geom_point()`, `geom_bar()`, `geom_boxplot()`, `geom_errorbar()` etc.
+-   Themes supply `ggplot()` with a pre-packaged format, e.g., `theme_classic()`, `theme_dark()`, `theme_minimal()`.
+-   A separate `theme()` function can be used to manually modify basically any aspect of the figure. Search for it in the help section to learn about its many arguments.
+-   Titles and axis labels with various functions like `ggtitle()`, `xlab()`, and more.
+-   `scale_...()` functions handle additional aesthetic tweaks and allow you to adjust color palettes using separate packages.
+-   Facets allow you to combine multiple plots into a single figure with `facet_wrap()`and `facet_grid()`.
+-   There are probably more, but this should cover most cases!
+
+::: callout-tip
+## <font size="5"> Try it </font>
+
+<font size="4"> Try your hand at making some plots. Tweak values here and there to see how it affects your output. </font>
+:::
+
+## Barplot with error bars
+
+Since `ggplot2` is part of the `tidyverse`, we can pipe our data right into it and even alter it in the pipeline before plotting. This first example uses `group_by()` and `summarize()` to calculate means, then it `ungroup()`s our data, re-orders the categories with `fct_reorder()` for ordered plotting, and pipes the altered data into a plot.
+
+The code for the plot is quite long, but don't let it intimidate you, it's just a bunch of little, stand-alone pieces strung together with (+) I'll provide it all together and then blown out with comments.
+
+```{r}
+#| label: barplot
+#| message: false
+#| eval: false
+
+birds %>%
+  group_by(family, common_name) %>%
+  summarize(mean.wing = mean(wing_length_mm),
+            sd.wing = sd(wing_length_mm)) %>%
+  ungroup() %>%
+  mutate(common_name = 
+           fct_reorder(common_name, desc(mean.wing))) %>%
+  ggplot(aes(x = common_name,
+                y = mean.wing,
+                fill = family)) +
+  geom_bar(stat = "identity",
+           alpha = 0.7) +
+  geom_errorbar(aes(x = common_name,
+                    ymin = mean.wing - sd.wing,
+                    ymax = mean.wing + sd.wing),
+                width = 0.2, 
+                color = "black",
+                alpha = 0.9,
+                linewidth = 0.7) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, 
+                                   hjust = 1),
+        plot.title = element_text(size=14)) +
+  xlab("Species") +
+  ylab("Mean wing length (mm)") +
+  ggtitle("Figure 1. Mean wing length of some birds")
+
+
+# And now annotated:
+
+# Supply data
+birds %>%
+  # Group it by family and common name
+  group_by(family, common_name) %>%
+  # Summarize it to get means (bars) and sds(error bars)
+  summarize(mean.wing = mean(wing_length_mm),
+            sd.wing = sd(wing_length_mm)) %>%
+  # Un-group to continue altering
+  ungroup() %>%
+  # Change the order to plot by descending order
+  mutate(common_name = 
+           fct_reorder(common_name, desc(mean.wing))) %>%
+  # Pipe into ggplot and set x axis, y axis, and fill color of each bar
+  ggplot(aes(x = common_name,
+                y = mean.wing,
+                fill = family)) +
+  # Tell ggplot we want a bar chart.
+  # stat="identity" says we'll supply a value, no need to count.
+  geom_bar(stat = "identity",
+           # alpha alters transparency. 0 = clear, 1 = opaque.
+           alpha = 0.7) +
+  # Provide error bar geometry and aesthetics
+  # ymin/ymax are length of error bars above and below the bar itself
+  geom_errorbar(aes(x = common_name,
+                    ymin = mean.wing - sd.wing,
+                    ymax = mean.wing + sd.wing),
+                # more self-explanatory aesthetics
+                width = 0.2, 
+                color = "black",
+                alpha = 0.9,
+                size = 0.7) +
+  # Provide a theme
+  theme_bw() +
+  # Alter a couple individual elements of the theme
+  # This first one changes how x axis text appears
+  theme(axis.text.x = element_text(angle = 30, 
+                                   hjust = 1),
+        # Change size of plot title
+        plot.title = element_text(size=14)) +
+  # x axis label
+  xlab("Species") +
+  # y axis label
+  ylab("Mean wing length (mm)") +
+  # plot title.
+  ggtitle("Figure 1. Mean wing length of some birds")
+```
+
+```{r}
+#| label: barplot2
+#| message: false
+#| echo: false
+
+birds %>%
+  group_by(family, common_name) %>%
+  summarize(mean.wing = mean(wing_length_mm),
+            sd.wing = sd(wing_length_mm)) %>%
+  ungroup() %>%
+  mutate(common_name = 
+           fct_reorder(common_name, desc(mean.wing))) %>%
+  ggplot(aes(x = common_name,
+                y = mean.wing,
+                fill = family)) +
+  geom_bar(stat = "identity",
+           alpha = 0.7) +
+  geom_errorbar(aes(x = common_name,
+                    ymin = mean.wing - sd.wing,
+                    ymax = mean.wing + sd.wing),
+                width = 0.2, 
+                color = "black",
+                alpha = 0.9,
+                linewidth = 0.7) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, 
+                                   hjust = 1),
+        plot.title = element_text(size=14)) +
+  xlab("Species") +
+  ylab("Mean wing length (mm)") +
+  ggtitle("Figure 1. Mean wing length of some birds")
+```
+
+## Violin-wrapped box plot
+
+You may have heard that statisticians are pushing to phase out box plots in favor of violin plots because box plots hide important patterns like the difference between normal and biomodal distributions. Here's a plot that combines the best of both worlds and adds our data ponits on top with a few comments inserted in between. It combines three geometries: box plots, violin plots, and point plots. They don't need `aes()` aesthetics because already provide them to `ggplot()`, and they're the same for each geometry.
+
+Remember to tweak values in here and run the code a few times over to see how your plot changes!
+
+```{r}
+#| label: violin-plot
+
+birds %>%
+  mutate(common_name = 
+           fct_reorder(common_name, wing_length_mm)) %>%
+  ggplot(aes(x = common_name,
+             y = wing_length_mm,
+             fill = family)) +
+  geom_violin(width = 0.6,
+                # alpha = 0 means complete transparency to prevent the violins from taking on a colored fill.
+                alpha = 0) +
+  geom_point(size = 2, 
+               alpha = 0.6,
+               aes(color = family),
+               # This tells the points to offset a bit for visibility
+               position = position_jitterdodge(dodge.width = 0.9,
+                                      jitter.width = 0.1)) +
+  geom_boxplot(width=0.2, 
+                 color="black", 
+                 # black boxplot lines with low transparency
+                 alpha=0.1) +
+  theme_classic() +
+  # You can locate the legend inside the figure with 0-1 coordinates for left/right and top/bottom.
+  theme(legend.position = c(0.15, 0.8),
+          plot.title = element_text(size=16)) +
+    ggtitle("Figure 2. A violin-wrapped boxplot of bird species wing length") +
+    xlab("Species") + 
+    ylab("Wing Length (mm)") + 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+```
+
+## Histogram
+
+A huge number of *R* packages have been developed to build off of or integrate with `ggplot2`. Some provide even fancier or more specific graph types, others provide palettes or other aesthetics. Below, we install and load a package that's designed for making color-blind-friendly plots.
+
+Rather than cluttering up a single figure and making it unreadable. This figure also takes advantage of `facet_wrap()` to create small sub-plot histograms for each species.
+
+```{r}
+#| label: histogram
+#| message: false
+
+# Install and load viridis for color-blind-friendly plots. Look back at the 2nd section of this document if you've forgotten how to install packages.
+library(viridis)
+
+birds %>%
+  mutate(common_name = 
+           fct_reorder(common_name, wing_length_mm)) %>%
+  # I didn't like that "family" was lower case in the figure, so I renamed and capitalized it. Remember to use the new name when defining aes().
+  rename(Family = family) %>%
+  ggplot(aes(x = wing_length_mm,
+             color = Family,
+             fill = Family)) +
+  geom_histogram(alpha = 0.6,
+                 binwidth = 5) +
+  # create one small plot per species in the figure
+  facet_wrap(~common_name) + 
+  # setting histogram bars to use color-blind-friendly colors
+  scale_fill_viridis(discrete = TRUE) +
+  # sets histogram lines to color-blind-friendly
+  scale_color_viridis(discrete = TRUE) +
+  theme_classic() +
+  theme(legend.position = "right",
+        # defining spacing between facets
+        panel.spacing = unit(0.4, "lines"),
+        # and size of facet grid subtitle text
+        strip.text.x = element_text(size = 8),
+        plot.title = element_text(size = 14)) +
+  xlab("Wing Length (mm)") +
+  ylab("Number of Individuals") +
+  ggtitle("Figure 3. Faceted histogram of wing length")
+  
+```
+
+## Saving/Exporting
+
+If you want to use your figures in documents produced outside of *R*, you'll probably want to save and export them. Plots can be saved in objects in *R* just like data frames. Let's copy-paste the histogram plot above and save it as an object called "histobirds". Then we'll call `ggsave()` to save the object.
+
+By default `ggsave()` will save the plot whose code you most recently ran *unless* you explicitly supply the argument `plot = object_name`, in this case, "histobirds". PDF output will generally give you the highest quality results, but use PNG if you need to save to Microsoft Word or PowerPoint or something along those lines. Useful arguments include width, height, units, dpi among others.
+
+```{r}
+#| label: save-plot
+
+# Save the plot
+histobirds <- birds %>%
+  mutate(common_name = 
+           fct_reorder(common_name, wing_length_mm)) %>%
+  # I didn't like that "family" was lower case in the figure, so I renamed and capitalized it. Remember to use the new name when defining aes().
+  rename(Family = family) %>%
+  ggplot(aes(x = wing_length_mm,
+             color = Family,
+             fill = Family)) +
+  geom_histogram(alpha = 0.6,
+                 binwidth = 5) +
+  # create one small plot per species in the figure
+  facet_wrap(~common_name) + 
+  # setting histogram bars to use color-blind-friendly colors
+  scale_fill_viridis(discrete = TRUE) +
+  # sets histogram lines to color-blind-friendly
+  scale_color_viridis(discrete = TRUE) +
+  theme_classic() +
+  theme(legend.position = "right",
+        # defining spacing between facets
+        panel.spacing = unit(0.4, "lines"),
+        # and size of facet grid subtitle text
+        strip.text.x = element_text(size = 8),
+        plot.title = element_text(size = 14)) +
+  xlab("Wing Length (mm)") +
+  ylab("Number of Individuals") +
+  ggtitle("Figure 3. Faceted histogram of wing length")
+
+
+# And now export it with ggsave()
+# I have a sub-folder in my project called Plots that I'd like to save to. Change/delete it if you've got something different.
+ggsave(plot = histobirds, "Plots/histobirds.pdf", width = 6, height = 4, units = "in")
+
+```
+
+The End :)
