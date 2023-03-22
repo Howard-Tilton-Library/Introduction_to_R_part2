@@ -8,7 +8,6 @@ In part I, you learned the fundamentals of R and built a foundation for working 
 
 Happy coding!
 
-To access the tutorial in your web browser, head here: <br>
-https://mellisbirds.github.io/Intro_to_R_part2/R_intro_part2.html
+# To access the tutorial in your web browser, head here: <br> <https://mellisbirds.github.io/Intro_to_R_part2/R_intro_part2.html>
 
 Happy coding!
