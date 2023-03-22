@@ -1,4 +1,4 @@
-# Intro to R: Part II
+# Intro to R, Part II: Projects, Packages, Processing, Plots
 
 ![](Data_In/Figures/TUL_Logos_narrow.png)
 
