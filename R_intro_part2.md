@@ -1,7 +1,7 @@
 ---
 title: "Intro to R, Part II: Projects, Packages, Processing, Plots"
 author: "Mike Ellis (he/him/his) <br> PhD Candidate <br> Ecology & Evolutionary Biology <br> Tulane University <br> mellis5@tulane.edu"
-date: "22 March 2023"
+date: "24 March 2023"
 
 format: 
   html:
@@ -34,7 +34,7 @@ execute:
 
 ![](Data_In/Figures/TUL_Logos_narrow.png){fig-align="center"}
 
-Welcome! This tutorial from Tulane University's Howard-Tilton Memorial Library is the second half of an Intro to *R* workshop. It is targeted towards faculty, post-docs, graduate students, and undergraduates new to *R*. It's goal is to teach you the basic *R* coding skills you're likely to need for every coding endeavor.
+Welcome! This tutorial from Tulane University's Howard-Tilton Memorial Library is the second half of an Intro to *R* workshop. It is targeted towards faculty, post-docs, graduate students, and undergraduates new to *R*. It's goal is to teach you the *R* coding skills you're likely to need for every coding endeavor.
 
 In part I, you learned the fundamentals of *R* and built a foundation for working with your own data. In this second installment, you'll learn to streamline project management, incorporate packages to increase functionality, code more efficiently in the "tidy" dialect, implement more complex conditional and iterative processes, group and summarize your data, and visualize your results with figures.
 
@@ -1105,9 +1105,9 @@ If you weren't paying attention to the order of patients in each column, and jus
 | Patient 2 | Meds Y     | Recovered |
 | Patient 3 | Meds Z     | Recovered |
 
-You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches.
+You might think Medication X was no good, when actually it was Medication Z used on Patient 3 that was an issue! Relational joins solve this issue and more by matching shared values in multiple data frames, then adding in the appropriate new data based on those matches. This is a huge improvement over techniques like `rbind()` introduced in *Part I*.
 
-There are several types of relational joins; we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left hand.
+There are several types of relational joins ([see the `dplyr` cheat sheet for an overview](https://posit.co/wp-content/uploads/2022/10/data-transformation-1.pdf)); we'll use `left_join()`, which adds data from *y* into *x* as new columns. Since *x* comes before *y*, *x* is on the left and *y* is on the right. Imagine our original data is in your left hand and our new data in your right; `left_join()` takes information from your right hand and adds it to the data in your left.
 
 ::: callout-tip
 ## <font size="5"> Try it </font>
