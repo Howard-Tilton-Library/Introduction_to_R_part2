@@ -6,6 +6,6 @@ Welcome! This tutorial from Tulane University's Howard-Tilton Memorial Library i
 
 In part I, you learned the fundamentals of *R* and built a foundation for working with your own data. In this second installment, you'll learn to streamline project management, incorporate packages to increase functionality, code more efficiently in the tidyverse dialect, implement more complex conditional and iterative processes, group and summarize your data, and visualize your results with figures.
 
-# To access the tutorial in your web browser, head here: <br> <https:/https://howard-tilton-library.github.io/Introduction_to_R_part2/R_intro_part2.html>
+# To access the tutorial in your web browser, head here: <br> https://howard-tilton-library.github.io/Introduction_to_R_part2/R_intro_part2.html
 
 Happy coding!
